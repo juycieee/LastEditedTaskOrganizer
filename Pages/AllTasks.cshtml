@@ -22,12 +22,15 @@
     .color-primary {
         background-color: #850E35;
     }
+
     .color-secondary {
         background-color: #EE6983;
     }
+
     .color-accent {
         background-color: #FFC4C4;
     }
+
     .color-light {
         background-color: #FCF5EE;
     }
@@ -45,7 +48,7 @@
     }
 
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #850E35; 
+        background-color: #850E35;
         border-radius: 20px;
     }
 
@@ -56,6 +59,7 @@
     .main-bg {
         background-color: #FCF5EE;
     }
+
     .card-bg {
         background-color: white;
     }
@@ -66,7 +70,7 @@
     }
 
     .sidebar-link-text {
-        font-size: 1.05rem; 
+        font-size: 1.05rem;
         font-weight: 500;
     }
 
@@ -75,7 +79,7 @@
     }
 
     .table-header-text {
-        font-size: 0.9rem; 
+        font-size: 0.9rem;
         font-weight: 700;
     }
 
@@ -85,6 +89,7 @@
         border-left: 4px solid #FFC4C4;
         padding-left: 20px;
     }
+
         .active-link span {
             margin-left: -4px;
         }
@@ -123,6 +128,7 @@
         .action-edit-icon:hover {
             color: #850E35;
         }
+
     .action-delete-icon:hover {
         color: #850E35;
     }
@@ -193,13 +199,13 @@
             </div>
 
             <div class="flex space-x-4 mt-4">
-                <select class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
-                    <option>All Employees</option>
-                    <option>Juana Dela Cruz</option>
-                    <option>Pedro Manalo</option>
-                    <option>Rhea Santos</option>
+                <select name="EmployeeFilter" class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
+                    <option value="">All Employees</option>
+                    @foreach (var employee in Model.EmployeeList)
+                    {
+                        <option value="@employee.Id">@employee.Name</option>
+                    }
                 </select>
-
                 <select class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
                     <option>All Status</option>
                     <option>Pending</option>
@@ -207,13 +213,19 @@
                     <option>Completed</option>
                 </select>
 
-                <select class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
-                    <option>All Priorities</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
-            </div>
+<select name="PriorityFilter" class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
+    <option value="">All Priorities</option>
+    
+    @{
+        // Dahil walang Priority Model, gumamit tayo ng static list
+        var priorities = new List<string> { "High", "Medium", "Low" };
+    }
+    
+    @foreach (var p in priorities)
+    {
+        <option value="@p">@p</option>
+    }
+</select>            </div>
         </div>
 
         <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col flex-grow min-h-[400px]">
@@ -227,11 +239,12 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left table-header-text font-bold text-gray-700 uppercase tracking-wider">
-                                Task Title
-                            </th>
-                            <th class="px-6 py-3 text-left table-header-text font-bold text-gray-700 uppercase tracking-wider">
                                 Assigned To
                             </th>
+                            <th class="px-6 py-3 text-left table-header-text font-bold text-gray-700 uppercase tracking-wider">
+                                Task Title
+                            </th>
+
                             <th class="px-6 py-3 text-left table-header-text font-bold text-gray-700 uppercase tracking-wider">
                                 Status
                             </th>
@@ -247,96 +260,51 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text font-medium text-gray-900">
-                                Setup New Server Environment
+                        @if (Model.Tasks.Any())
+                        {
+                            @foreach (var task in Model.Tasks)
+                            {
+                                // ❗ Hahanapin ang Employee Name gamit ang EmployeeId ❗
+                                var assignedEmployee = Model.EmployeeList.FirstOrDefault(e => e.Id == task.EmployeeId);
+                                var employeeName = assignedEmployee?.Name ?? "Unknown Employee"; // Gamitin ang 'Unknown' kung hindi mahanap
+
+                                <tr>
+                                    <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800">
+                                        @employeeName
+                                    </td>
+                                                                        <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800">
+                                        @task.Title
+                                    </td>
+
+                                    <td class="px-6 py-4 table-cell-text whitespace-nowrap">
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @(task.Status == "Completed" ? "bg-green-100 text-green-800" :task.Status == "In Progress" ? "bg-yellow-100 text-yellow-800" :"bg-red-100 text-red-800")">@task.Status
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 table-cell-text whitespace-nowrap">
+                                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @(task.Priority == "High" ? "bg-red-200 text-red-900" : task.Priority == "Medium" ? "bg-yellow-200 text-yellow-900" :"bg-blue-200 text-blue-900")"> @task.Priority
+                                         </span>
+                                    </td>
+                            <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800"> @(task.DueDate.HasValue? task.DueDate.Value.ToString("MMM dd, yyyy") : "N/A")
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                Juana Dela Cruz
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    Pending
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                    High
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                2025-11-28
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-left table-cell-text font-medium">
-                                <a href="#" class="action-edit-icon hover:text-primary mr-3 text-xl" title="Edit Task">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <a href="/EditTask/@task.Id" class="action-edit-icon text-xl hover:text-primary mr-3 transition duration-150" title="Edit Task">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="#" class="text-red-600 action-delete-icon text-xl" title="Delete Task">
-                                    <i class="fas fa-trash-alt"></i>
+                                <a href="/DeleteTask/@task.Id" class="action-delete-icon text-xl text-red-600 hover:text-red-900 transition duration-150" title="Delete Task">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>
-
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text font-medium text-gray-900">
-                                Update Marketing Brochure Design
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                Pedro Manalo
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Completed
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                    Medium
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                2025-11-20
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-left table-cell-text font-medium">
-                                <a href="#" class="action-edit-icon hover:text-primary mr-3 text-xl" title="Edit Task">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="#" class="text-red-600 action-delete-icon text-xl" title="Delete Task">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text font-medium text-gray-900">
-                                Organize File Backup System
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                Rhea Santos
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                                    In Progress
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                    Low
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                2025-12-05
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-left table-cell-text font-medium">
-                                <a href="#" class="action-edit-icon hover:text-primary mr-3 text-xl" title="Edit Task">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="#" class="text-red-600 action-delete-icon text-xl" title="Delete Task">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-
+                                                }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                    No added task yet.
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

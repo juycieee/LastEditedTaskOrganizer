@@ -2,43 +2,61 @@
 @model TaskOrganizer.Pages.SuccessModel
 @{
     ViewData["Title"] = "Registration Success";
+    Layout = null;
 }
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-          }
-        }
-      }
+<style>
+    /* Reset and Base Styles */
+    body, html {
+        height: 100%;
+        min-height: 100vh;
+        overflow: hidden;
     }
-</script>
 
-<div class="flex min-h-screen items-center justify-center">
+    /* ************************************************* */
+    /* --- COLOR PALETTE (From Register Page) --- */
+    /* ************************************************* */
+    .color-primary { color: #49243E; }       /* Deep Purple - Text/Button */
+    .color-secondary { color: #704264; }     /* Medium Purple - Hover/Accent */
+    .color-light-bg { background-color: #DBAFA0; } /* Pale Rose - Background on card */
+    .color-bg-gradient {
+        background: linear-gradient(90deg, #f3b0f2, #fdf5b9); /* Overall Page BG */
+    }
 
-    <div class="max-w-sm w-full text-center p-10 bg-dark-card-bg rounded-2xl shadow-2xl border-t-8 border-secondary-accent">
+    /* Custom button style for the link */
+    .success-btn {
+        background: #704264;
+        color: white;
+        transition: background 0.3s, transform 0.2s;
+    }
 
-        <div class="mx-auto w-16 h-16 bg-highlight-button rounded-full flex items-center justify-center mb-6 shadow-md">
-            <svg class="w-8 h-8 text-primary-light-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    .success-btn:hover {
+        background: #49243E;
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="color-bg-gradient flex min-h-screen items-center justify-center p-4">
+
+    <div class="max-w-sm w-full text-center p-8 bg-white rounded-2xl shadow-2xl
+                 border-t-8 border-secondary transform transition-all duration-300 scale-100">
+
+        <div class="mx-auto w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-lg">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
         </div>
 
-        <h1 class="text-3xl font-extrabold text-primary-light-text mb-3">✅ Registration Complete</h1>
+        <h1 class="text-3xl font-extrabold color-primary mb-3">✅ Registration Complete</h1>
 
-        <p class="text-gray-300 mb-6 text-lg">
+        <p class="text-gray-600 mb-6 text-lg">
             **Thank you for registering.** Your account has been successfully created and is now active.
         </p>
 
-        <a href="/Login" class="inline-block w-full py-3 px-4 bg-highlight-button text-white font-semibold rounded-lg shadow-md
-
-            /* SIMPLIFIED HOVER: Gumamit ng default hover color para di masyadong maingay */
-            hover:bg-secondary-accent hover:text-white
-
-            transition duration-300 focus:outline-none focus:ring-4 focus:ring-secondary-accent focus:ring-opacity-50">
+        <a href="/Login" class="success-btn inline-block w-full py-3 px-4 font-semibold rounded-lg shadow-md
+                                transition duration-300 focus:outline-none focus:ring-4 focus:ring-secondary focus:ring-opacity-50">
             Proceed to Login
         </a>
 

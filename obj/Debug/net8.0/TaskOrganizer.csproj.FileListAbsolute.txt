@@ -26,6 +26,7 @@ C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\TaskO
 C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\TaskOrganizer.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\TaskOrganizer.RazorAssemblyInfo.cache
 C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\TaskOrganizer.RazorAssemblyInfo.cs
+C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\TaskOrganizer.sourcelink.json
 C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\rjimswa.dswa.cache.json
 C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 C:\Users\Nhadine\source\repos\taskOrganizer\TaskOrganizer\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

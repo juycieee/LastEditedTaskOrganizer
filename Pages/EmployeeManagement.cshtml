@@ -205,81 +205,33 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text font-bold text-gray-900">
-                                Juana Dela Cruz
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                juanadcruz
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                juana.dela.cruz@company.com
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-3 py-1 inline-flex role-badge font-semibold rounded-full text-base">
-                                    Employee
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-left table-cell-text font-medium">
-                                <a href="#" class="action-icon hover:text-primary mr-4 text-xl" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="text-red-600 hover:text-primary text-xl" title="Delete Employee">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text font-bold text-gray-900">
-                                Pedro Manalo
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                pedromanalo
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                pedro.manalo@company.com
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-3 py-1 inline-flex role-badge font-semibold rounded-full text-base">
-                                    Employee
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-left table-cell-text font-medium">
-                                <a href="#" class="action-icon hover:text-primary mr-4 text-xl" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="text-red-600 hover:text-primary text-xl" title="Delete Employee">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text font-bold text-gray-900">
-                                Rhea Santos
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                rhea_santos
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
-                                rhea.santos@company.com
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-3 py-1 inline-flex role-badge font-semibold rounded-full text-base">
-                                    Employee
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-left table-cell-text font-medium">
-                                <a href="#" class="action-icon hover:text-primary mr-4 text-xl" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="text-red-600 hover:text-primary text-xl" title="Delete Employee">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-
+                        @foreach (var employee in Model.Employees)
+                        {
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap table-cell-text font-bold text-gray-900">
+                                    @employee.Name
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
+                                    @employee.Username
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap table-cell-text text-gray-600">
+                                    @employee.Email
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 inline-flex role-badge font-semibold rounded-full text-base">
+                                        Employee
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-left table-cell-text font-medium">
+                                    <a href="#" class="action-icon hover:text-primary mr-4 text-xl" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="#" class="text-red-600 hover:text-primary text-xl" title="Delete Employee">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

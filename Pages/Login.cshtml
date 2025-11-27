@@ -9,186 +9,429 @@
 
 
 <style>
+    /* Reset and Base Styles */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Segoe UI", sans-serif;
+        /* Updated font to match Register example */
+        font-family: 'Inter', "Segoe UI", sans-serif;
     }
 
     body {
-        background: #F9F8F6;
+        /* Page Background: Light Beige/Off-White */
+        background: linear-gradient(90deg, #f3b0f2, #fdf5b9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        transition: background-color 0.3s;
     }
 
+    /* Container for the entire page */
     .login-container {
         width: 100%;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0;
+        padding: 20px;
     }
 
+    /* ************************************************************ */
+    /* --- Main Card/Box (WIDE FORMAT & UPDATED SHADOW) --- */
+    /* ************************************************************ */
     .login-box {
-        width: 70%;
-        max-width: 950px;
-        height: 600px;
-        display: flex;
-        border-radius: 15px;
+        width: 95%;
+        max-width: 1200px; /* Ginawang mas malapad (Wide) */
+        height: auto;
+        min-height: 650px; /* Reduced min-height for better aspect ratio */
+        display: grid;
+        grid-template-columns: 1.3fr 1fr; /* Mas malaki ang kaliwang panel */
+        border-radius: 20px;
         overflow: hidden;
-        box-shadow: 0 7px 25px rgba(0,0,0,0.25);
+        /* Ginamit ang mas obvious na shadow (0 20px 45px rgba(0,0,0,0.35)) */
+        box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+        background-color: white;
+        transition: box-shadow 0.3s ease-in-out;
     }
 
-    .left-panel {
-        text-align: center;
-        width: 45%;
+    /* *********************************************************** */
+    /* --- Info and Features Column (LEFT - DEEP ROSE BG) --- */
+    /* *********************************************************** */
+    .info-column {
+        padding: 50px;
+        /* Background: Deep Rose/Plum */
         background: #704264;
         color: white;
-        padding: 60px 40px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
+        border-radius: 20px 0 0 20px;
     }
 
-    .social-icons i {
-        margin-right: 15px;
-        font-size: 22px;
-        cursor: pointer;
-        /* Ginamit ang #DBAFA0 for contrast */
-        color: #DBAFA0;
-        transition: 0.3s;
+        .info-column h1 {
+            /* INCREASED SIZE */
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .info-column .tagline {
+            /* INCREASED SIZE */
+            font-size: 24px;
+            font-weight: 500;
+            /* Lighter Rose Accent */
+            color: #DBAFA0;
+            margin-bottom: 30px;
+        }
+
+        .info-column .description {
+            /* INCREASED SIZE */
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #F0F0F0;
+        }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
     }
 
-        .social-icons i:hover {
+    .feature-item {
+        /* Feature boxes: Use Primary Dark Rose */
+        background: #49243E;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        min-height: 120px;
+        justify-content: space-between;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+
+        /* Hover effect for feature boxes */
+        .feature-item:hover {
             transform: translateY(-3px);
-            color: #BB8493;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            background: #704264; /* Deep Rose on hover */
         }
 
-    .right-panel {
-        text-align: center;
-        width: 55%;
+        .feature-item i {
+            /* INCREASED SIZE */
+            font-size: 30px;
+            margin-bottom: 8px;
+            color: #DBAFA0; /* Light Rose icon color */
+        }
+
+        .feature-item h3 {
+            /* INCREASED SIZE */
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .feature-item p {
+            /* INCREASED SIZE */
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+
+    /* ************************************************** */
+    /* --- Login Form Column (RIGHT - LIGHT ROSE BG) --- */
+    /* ************************************************** */
+    .form-column {
+        /* Form Column: Light Rose/Beige */
         background: #DBAFA0;
-        padding: 50px 50px;
+        padding: 60px 40px; /* Reduced padding for wide view */
         display: flex;
         flex-direction: column;
         justify-content: center;
+        text-align: center;
+        border-radius: 0 20px 20px 0;
     }
 
-        .right-panel h2 {
-            text-align: center;
+        .form-column h2 {
+            /* INCREASED SIZE */
             font-size: 33px;
-            margin-bottom: 10px;
-            color: black;
+            margin-bottom: 5px;
+            /* Text color: Primary Dark Rose */
+            color: #49243E;
+            font-weight: 700;
+            line-height: 1.2;
         }
 
-        .right-panel small {
-            opacity: 0.7;
-            display: block;
-            margin-bottom: 25px;
-        }
+    /* Icon for "Welcome Back" section */
+    .form-icon {
+        margin: 0 auto 15px auto;
+        /* INCREASED SIZE */
+        font-size: 40px;
+        /* Icon color: Primary Dark Rose */
+        color: #49243E;
+    }
 
+    .form-column small {
+        /* INCREASED SIZE */
+        font-size: 16px;
+        opacity: 0.8;
+        display: block;
+        margin-bottom: 30px;
+        /* Text color: Primary Dark Rose */
+        color: #49243E;
+    }
 
     .form-group {
-        margin-bottom: 18px;
+        margin-bottom: 20px;
+        text-align: left;
     }
 
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid #49243E;
-            border-radius: 6px;
-            font-size: 17px;
-            transition: 0.2s;
+    /* Container for password field and icon */
+    .password-container {
+        position: relative;
+    }
+
+    /* Style for the eye icon button */
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #704264; /* Deep Rose color for the icon */
+        font-size: 20px;
+        transition: color 0.2s;
+        padding: 5px;
+    }
+
+        .toggle-password:hover {
+            color: #49243E; /* Darker on hover */
         }
 
-            .form-group input:focus {
-                border-color: #BB8493;
-                outline: none;
-            }
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+        width: 100%;
+        /* INCREASED PADDING */
+        padding: 14px 16px;
+        /* Added space on the right for the eye icon */
+        padding-right: 45px;
+        /* Input Border: Primary Dark Rose */
+        border: 1px solid #49243E;
+        border-radius: 8px;
+        /* INCREASED FONT SIZE */
+        font-size: 16px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background-color: white;
+        color: #333;
+    }
+
+    /* Input Focus Effect */
+    .form-group input:focus {
+        /* Focus Color: Mid-tone Rose Accent */
+        border-color: #BB8493;
+        box-shadow: 0 0 0 3px rgba(187, 132, 147, 0.4);
+        outline: none;
+    }
 
     .login-btn {
         width: 100%;
+        /* Button BG: Primary Dark Rose */
         background: #49243E;
         border: none;
         color: white;
-        padding: 13px;
-        font-size: 19px;
-        border-radius: 6px;
+        /* INCREASED PADDING */
+        padding: 16px;
+        /* INCREASED FONT SIZE */
+        font-size: 20px;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        border-radius: 10px;
         cursor: pointer;
-        margin-top: 10px;
-        transition: 0.3s;
+        margin-top: 25px;
+        transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     }
 
+        /* Button Hover Effect */
         .login-btn:hover {
+            /* Button Hover BG: Deep Rose */
             background: #704264;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(73, 36, 62, 0.4);
         }
 
+    /* Universal red text for errors */
     .text-red {
         color: red;
         font-size: 14px;
+        text-align: left;
+        display: block;
+        margin-top: 4px;
+        font-weight: 500;
     }
 
-    .create-link {
-        margin-top: 15px;
-        text-align: center;
+    /* Validation Summary Styling */
+    .validation-summary {
+        color: red;
         font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 25px;
+        display: block;
+    }
+
+    /* Styling for Role Selection */
+    .role-label {
+        /* INCREASED SIZE */
+        font-size: 16px;
+        font-weight: 600;
+        /* Role Label Text: Primary Dark Rose */
+        color: #49243E;
+        margin-bottom: 8px;
+        text-align: left;
+    }
+
+    .role-option-label {
+        font-size: 16px;
+        color: black;
+        font-weight: 400;
+    }
+
+
+    .role-radio {
+        /* Radio Checkbox Color: Primary Dark Rose */
+        accent-color: #49243E;
+        color: #49243E;
+    }
+
+    .role-group {
+        text-align: left;
+        margin-top: 10px;
+    }
+
+
+    .create-link {
+        margin-top: 30px;
+        text-align: center;
+        /* INCREASED SIZE */
+        font-size: 16px;
+        color: #49243E; /* Primary Dark Rose */
     }
 
         .create-link a {
-            color: #704264;
+            /* Link Color: Primary Dark Rose */
+            color: #49243E;
             font-weight: bold;
             text-decoration: none;
+            transition: color 0.3s;
         }
 
             .create-link a:hover {
                 text-decoration: underline;
+                /* Link Hover Color: Deep Rose */
+                color: #704264;
             }
 
-    .task-image {
-        width: 380px;
-        height: auto;
-    }
+    /* Responsive adjustments for smaller screens */
+    @@media (max-width: 950px) {
+        .login-box {
+            /* Ibabalik sa mobile settings para maging stack ang columns */
+            grid-template-columns: 1fr;
+            max-width: 500px;
+            min-height: auto;
+            border-radius: 15px;
+            /* Inayos ang mobile shadow din */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
 
-    .role-label {
-        color: #49243E;
-        font-weight: 600; 
-        font-size: 16px;
-    }
+        .info-column, .form-column {
+            padding: 30px;
+        }
 
-    .role-radio {
-        accent-color: #49243E; 
-    }
+        .info-column {
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
 
+            .info-column h1 {
+                font-size: 42px;
+            }
+
+        .form-column {
+            border-radius: 0 0 15px 15px;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
 <div class="login-container">
     <div class="login-box">
 
-        <div class="left-panel">
-            <div class="social-icons" style="display: flex; justify-content: center; margin-top: 20px;">
-                <img src="/images/4.png" alt="Task Icon" class="task-image">
+        <div class="info-column">
+            <div>
+                <h1>Employee Task Organizer</h1>
+                <p class="tagline">Streamline Your Workflow</p>
+                <p class="description">
+                    The **Employee Task Organizer** is a real-time task monitoring system where the admin assigns tasks to employees, and employees can view, track, and update their assigned tasks through a simple and organized interface. The system ensures smooth communication between admin and employees by providing email notifications for task updates, deadlines, and status changes. It focuses on making task delegation **efficient**, **clear**, and **easy** to manage for both sides.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Task Management</h3>
+                    <p>Create and assign tasks easily.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Progress Tracking</h3>
+                    <p>Monitor team performance in real-time.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-bell"></i>
+                    <h3>Smart Reminders</h3>
+                    <p>Never miss deadlines with timely alerts.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email Notifications</h3>
+                    <p>Stay updated on task changes and updates.</p>
+                </div>
             </div>
         </div>
 
-        <div class="right-panel">
-            <h2>Welcome Back <br /> to Task Organizer!</h2>
-            <p>Log in to manage your tasks and stay productive.</p>
+        <div class="form-column">
+            <i class="fas fa-clipboard-list form-icon"></i>
 
-            <div asp-validation-summary="All" class="text-red mb-3"></div>
+            <h2>Welcome Back <br /> to Task Organizer!</h2>
+            <small>Log in to manage your tasks and stay productive.</small>
 
             <form method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary text-red"></div>
+
                 <div class="form-group">
-                    <input asp-for="Input.Email" placeholder="Email" />
+                    <input asp-for="Input.Email" placeholder="Email" type="text" />
                     <span asp-validation-for="Input.Email" class="text-red"></span>
                 </div>
 
                 <div class="form-group">
-                    <input asp-for="Input.Password" type="password" placeholder="Password" />
+                    <div class="password-container">
+                        <input id="PasswordInput" asp-for="Input.Password" type="password" placeholder="Password" />
+                        <span id="TogglePassword" class="fas fa-eye toggle-password"></span>
+                    </div>
                     <span asp-validation-for="Input.Password" class="text-red"></span>
                 </div>
 
-                <div class="form-group">
-                    <label class="role-label block mb-2 text-left">Log in as:</label>
+                <div class="form-group role-group">
+                    <label class="role-label block mb-2">Log in as:</label>
                     <div class="flex space-x-8 justify-center">
 
                         <label class="flex items-center cursor-pointer">
@@ -197,7 +440,7 @@
                                    value="Employee"
                                    checked="checked"
                                    class="role-radio h-4 w-4" />
-                            <span class="ml-2 role-label">Employee</span>
+                            <span class="ml-2 role-option-label">Employee</span>
                         </label>
 
                         <label class="flex items-center cursor-pointer">
@@ -205,11 +448,12 @@
                                    asp-for="Input.Role"
                                    value="Admin"
                                    class="role-radio h-4 w-4" />
-                            <span class="ml-2 role-label">Admin</span>
+                            <span class="ml-2 role-option-label">Admin</span>
                         </label>
                     </div>
                     <span asp-validation-for="Input.Role" class="text-red"></span>
                 </div>
+
                 <button type="submit" class="login-btn">Login</button>
             </form>
 
@@ -220,6 +464,25 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('PasswordInput');
+        const togglePassword = document.getElementById('TogglePassword');
+
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function () {
+                // Toggle the type attribute between 'password' and 'text'
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                // Toggle the eye icon class (fa-eye to fa-eye-slash and vice-versa)
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+    });
+</script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

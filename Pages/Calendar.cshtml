@@ -6,7 +6,7 @@
 }
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dcZ6a6u+QHbX5gP0F0ZQ/5DwC1ElGfFY7u1y6m3Oa4k5+HxJ9y8Lzr/6qImQnP+mF8xA6djLM0h+4q45X+3xKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" xintegrity="sha512-dcZ6a6u+QHbX5gP0F0ZQ/5DwC1ElGfFY7u1y6m3Oa4k5+HxJ9y8Lzr/6qImQnP+mF8xA6djLM0h+4q45X+3xKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
     body, html {
@@ -15,24 +15,30 @@
         height: 100%;
         width: 100%;
         overflow: hidden;
+        font-family: 'Inter', sans-serif;
     }
 
+    /* Color Palette */
     .color-primary {
-        background-color: #8B453A;
+        background-color: #8B453A; /* Deep Terracotta Brown */
     }
+
     .color-secondary {
-        background-color: #D0B8A8;
+        background-color: #D0B8A8; /* Muted Taupe/Rose */
     }
+
     .color-accent {
-        background-color: #DFD3C3;
+        background-color: #DFD3C3; /* Light Cream */
     }
+
     .color-light {
-        background-color: #F8EDE3;
+        background-color: #F8EDE3; /* Off-White/Ivory */
     }
 
     .text-primary {
         color: #8B453A;
     }
+
     .text-secondary {
         color: #D0B8A8;
     }
@@ -44,9 +50,11 @@
     .sidebar-bg {
         background-color: #8B453A;
     }
+
     .main-bg {
         background-color: #F8EDE3;
     }
+
     .card-bg {
         background-color: white;
     }
@@ -57,8 +65,8 @@
     }
 
     .active-link {
-        background-color: #D0B8A8; 
-        color: #3A0519; 
+        background-color: #D0B8A8;
+        color: #3A0519;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         font-weight: 700;
     }
@@ -70,8 +78,8 @@
     }
 
     .user-btn {
-        background-color: #D0B8A8; 
-        color: #8B453A; 
+        background-color: #D0B8A8;
+        color: #8B453A;
         font-weight: bold;
         border: 1px solid #DFD3C3;
     }
@@ -87,7 +95,7 @@
     }
 
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #8B453A; 
+        background-color: #8B453A;
         border-radius: 20px;
     }
 
@@ -103,9 +111,27 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 40px; 
+        height: 40px;
         font-weight: 500;
-        transition: background-color 0.15s;
+        transition: background-color 0.15s, transform 0.1s;
+        position: relative;
+    }
+
+    .has-task::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        background-color: #D0B8A8; /* Secondary color dot */
+        border-radius: 50%;
+        opacity: 0.8;
+    }
+
+    .high-priority-dot::after {
+        background-color: #EF4444; /* Red dot for High Priority */
     }
 
     .modal-backdrop {
@@ -122,7 +148,7 @@
         </div>
 
         <nav class="space-y-2 flex-grow">
-            <a href="/Calendar" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover-link transition duration-150 text-white/90 hover:text-dark">
+            <a href="/Dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover-link transition duration-150 text-white/90 hover:text-dark">
                 <i class="fas fa-chart-line w-5"></i>
                 <span class="link-text">Dashboard</span>
             </a>
@@ -150,6 +176,7 @@
             </a>
         </div>
     </div>
+
     <div class="flex-1 main-bg p-8 overflow-y-auto custom-scrollbar">
 
         <div class="flex justify-between items-center mb-8 flex-shrink-0">
@@ -158,7 +185,7 @@
                 <p class="text-lg text-gray-500">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
             </div>
             <button class="user-btn text-lg px-5 py-2 rounded-lg font-semibold shadow-md transition duration-150 flex items-center gap-2">
-                <i class="fas fa-user"></i> User
+                <i class="fas fa-user"></i> @Model.EmployeeUsername
             </button>
         </div>
 
@@ -167,7 +194,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-primary-accent">
                 <div>
                     <p class="text-gray-500 text-lg">Total Tasks</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.TotalTasksCount</h2>
                     <p class="text-base text-gray-400">All your tasks</p>
                 </div>
                 <div class="text-3xl text-primary-accent opacity-70">
@@ -178,7 +205,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-green-500">
                 <div>
                     <p class="text-gray-500 text-lg">Completed</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.CompletedTasksCount</h2>
                     <p class="text-base text-gray-400">Finished tasks</p>
                 </div>
                 <div class="text-3xl text-green-500 opacity-70">
@@ -189,7 +216,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-yellow-500">
                 <div>
                     <p class="text-gray-500 text-lg">Pending</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.PendingTasksCount</h2>
                     <p class="text-base text-gray-400">In progress</p>
                 </div>
                 <div class="text-3xl text-yellow-500 opacity-70">
@@ -200,7 +227,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-500">
                 <div>
                     <p class="text-gray-500 text-lg">High Priority</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.HighPriorityTasksCount</h2>
                     <p class="text-base text-gray-400">Urgent tasks</p>
                 </div>
                 <div class="text-3xl text-red-500 opacity-70">
@@ -234,17 +261,46 @@
                 </div>
             </div>
 
-            <div class="card-bg p-6 rounded-xl shadow-lg">
-                <h3 class="text-2xl font-semibold mb-4 border-b pb-2 text-gray-800">
+            <div class="card-bg p-6 rounded-xl shadow-lg overflow-y-auto max-h-[70vh]">
+                <h3 class="text-2xl font-semibold mb-4 border-b pb-2 text-gray-800 sticky top-0 bg-white">
                     <i class="fas fa-clipboard-check text-primary"></i> Today's Tasks
                 </h3>
-                <div class="text-center text-gray-500 py-10">
-                    <i class="fas fa-info-circle text-gray-300 text-4xl mb-3"></i>
-                    <p class="text-lg">No tasks due today</p>
+
+                <div id="todaysTasksList">
+                    @if (Model.TodaysTasks.Any())
+                    {
+                        // ❗ UPDATED: Inayos ang sorting logic. Ngayon, nagso-sort muna by DueDate (na may kasamang time),
+                        // ❗ at pangalawa, by High Priority (descending) para sa tasks na walang specific time (optional check).
+                        // ❗ Note: Ang DueDate sorting sa .cs file ay sapat na, pero inulit ko dito para sigurado.
+                        @foreach (var task in Model.TodaysTasks.OrderBy(t => t.DueDate))
+                        {
+                            var priorityColor = task.Priority == "High" ? "bg-red-500" : (task.Priority == "Medium" ? "bg-yellow-500" : "bg-green-500");
+
+                            <div class="p-3 mb-3 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition duration-150">
+                                <div class="flex items-center justify-between mb-1">
+                                    <h4 class="font-bold text-gray-800 text-lg">@task.Title</h4>
+                                    <span class="@priorityColor text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                                        @task.Priority
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">@task.Description</p>
+
+                                <p class="text-sm font-semibold text-primary-accent flex items-center gap-1">
+                                    <i class="far fa-clock text-xs"></i>
+                                    Due: @(task.DueDate.HasValue? task.DueDate.Value.ToString("hh:mm tt") : "Any Time Today")
+                                </p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center text-gray-500 py-10">
+                            <i class="fas fa-smile-beam text-green-400 text-4xl mb-3"></i>
+                            <p class="text-lg">No incomplete tasks due today.</p>
+                            <p class="text-sm">You are all set for the day!</p>
+                        </div>
+                    }
                 </div>
-                <button class="w-full mt-4 bg-secondary text-dark py-2 rounded-lg font-semibold hover:bg-primary hover:text-white transition duration-150">
-                    View Full Day
-                </button>
             </div>
         </div>
     </div>
@@ -274,22 +330,69 @@
     </div>
 </div>
 
-<script>
-    // Get the modal element
-    const modal = document.getElementById('logoutModal');
+@{
+    // C# Block: Prepare a safer, simpler JSON payload for JavaScript
+    // 1. Select only the necessary fields (DueDate and Priority) for calendar marking.
+    var taskDataForJs = Model.AllMyTasks
+        .Where(t => t.DueDate.HasValue && t.Status != "Completed")
+        .Select(t => new
+        {
+            // Convert to ISO 8601 string format for reliable JS Date parsing
+            DueDate = t.DueDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"),
+            t.Priority
+        });
 
-    // Function to show the modal (for Logout)
+    // 2. Serialize the C# object to a JSON string.
+    var jsonTasks = System.Text.Json.JsonSerializer.Serialize(taskDataForJs);
+
+    // 3. CRITICAL FIX: Escape single quotes ('\'') within the JSON string
+    //    so the string literal assignment in JavaScript does not break.
+    var jsSafeJson = jsonTasks.Replace("'", "\\'");
+}
+
+<script>
+    // Task Data from C# Model (Converted to JavaScript object)
+    // FIX: Inject the escaped JSON string inside single quotes, then use JSON.parse()
+    const allTasks = JSON.parse('@Html.Raw(jsSafeJson)');
+
+    // Convert DueDate string to Date objects for easier manipulation
+    const taskDates = allTasks.map(task => {
+        // Use the Date object to correctly parse the ISO string
+        const date = new Date(task.DueDate);
+
+        // Return a clean date key (YYYY-M-D) for lookup, using 1-based month index
+        const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+        return {
+            dateKey: dateKey,
+            priority: task.priority
+        };
+    });
+
+    // Group tasks by date for calendar highlighting
+    const tasksByDate = taskDates.reduce((acc, task) => {
+        if (!acc[task.dateKey]) {
+            acc[task.dateKey] = [];
+        }
+        acc[task.dateKey].push(task.priority);
+        return acc;
+    }, {});
+
+
+    /* --- Calendar JavaScript --- */
+
+    const modal = document.getElementById('logoutModal');
     function showLogoutModal(event) {
         event.preventDefault();
         modal.classList.remove('hidden');
+        modal.querySelector('.scale-95').classList.remove('scale-95');
+        modal.querySelector('.scale-95').classList.add('scale-100');
     }
-
-    // Function to hide the modal (for Logout)
     function hideLogoutModal() {
-        modal.classList.add('hidden');
+        modal.querySelector('.scale-100').classList.remove('scale-100');
+        modal.querySelector('.scale-95').classList.add('scale-95');
+        setTimeout(() => modal.classList.add('hidden'), 300);
     }
-
-    /* --- Calendar JavaScript (Using Earth/Terracotta Colors) --- */
 
     let currentDay = new Date();
     let currentMonth = currentDay.getMonth();
@@ -300,9 +403,13 @@
     const monthDisplay = document.getElementById('currentMonthDisplay');
     const today = new Date();
 
-    // Define the colors used in CSS for consistency
-    const PRIMARY_COLOR_BG = '#8B453A'; // Deep Terracotta Brown
-    const SECONDARY_COLOR_BG = '#D0B8A8'; // Muted Taupe/Rose
+    // Normalize today's date for comparison
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+
+    const PRIMARY_COLOR_BG = '#8B453A';
+    const SECONDARY_COLOR_BG = '#D0B8A8';
 
     // FUNCTION: Renders the calendar view
     function renderCalendar() {
@@ -310,7 +417,7 @@
         const firstDayIndex = date.getDay();
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-        datesContainer.innerHTML = ''; // Clear old dates
+        datesContainer.innerHTML = '';
         monthDisplay.textContent = monthNames[currentMonth] + ' ' + currentYear;
 
         // 1. Render blank cells (for days before the 1st)
@@ -323,11 +430,30 @@
         // 2. Render the dates
         for (let day = 1; day <= daysInMonth; day++) {
             const dayCell = document.createElement('span');
-            dayCell.classList.add('calendar-cell', 'rounded-xl', 'cursor-pointer', 'hover:bg-gray-200');
+            dayCell.classList.add('calendar-cell', 'rounded-xl', 'cursor-pointer', 'select-none');
             dayCell.textContent = day;
 
-            // Check if this is the current day
-            const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+            const isToday = day === todayDate && currentMonth === todayMonth && currentYear === todayYear;
+
+            // Check for tasks on this specific date
+            // Note: Month index in dateKey is 1-based (currentMonth + 1)
+            const dateKey = `${currentYear}-${currentMonth + 1}-${day}`;
+            const tasksOnDay = tasksByDate[dateKey];
+
+            if (tasksOnDay && tasksOnDay.length > 0) {
+                dayCell.classList.add('has-task');
+
+                // Check if any task is high priority for a red dot
+                if (tasksOnDay.includes("High")) {
+                    dayCell.classList.add('high-priority-dot');
+                }
+
+                dayCell.onclick = () => {
+                    // You can implement task filtering here if needed
+                    console.log(`Tasks for ${monthNames[currentMonth]} ${day}, ${currentYear}: ${tasksOnDay.length} tasks`);
+                };
+            }
+
 
             if (isToday) {
                 // Style for Today: Primary color BG, white text
@@ -335,15 +461,28 @@
                 dayCell.style.backgroundColor = PRIMARY_COLOR_BG;
                 dayCell.classList.add('text-white', 'font-bold', 'shadow-md');
             } else {
-                if (currentMonth !== today.getMonth() || currentYear !== today.getFullYear()) {
-                    dayCell.classList.add('text-gray-400');
+                dayCell.classList.add('hover:bg-gray-200');
+
+                if (currentMonth < todayMonth && currentYear === todayYear || currentYear < todayYear) {
+                    // Past months/years
+                    dayCell.classList.add('text-gray-400', 'cursor-default');
+                    dayCell.classList.remove('hover:bg-gray-200');
+                } else if (currentMonth === todayMonth && currentYear === todayYear && day < todayDate) {
+                    // Past days in the current month
+                    dayCell.classList.add('text-gray-400', 'cursor-default');
+                    dayCell.classList.remove('hover:bg-gray-200');
+                } else {
+                    // Future days/months
+                    dayCell.classList.add('text-gray-700');
+
+                    // Hover effect for interactive days
+                    dayCell.addEventListener('mouseenter', () => {
+                        dayCell.style.backgroundColor = SECONDARY_COLOR_BG;
+                    });
+                    dayCell.addEventListener('mouseleave', () => {
+                        dayCell.style.backgroundColor = 'transparent';
+                    });
                 }
-                dayCell.addEventListener('mouseenter', () => {
-                    dayCell.style.backgroundColor = SECONDARY_COLOR_BG;
-                });
-                dayCell.addEventListener('mouseleave', () => {
-                    dayCell.style.backgroundColor = 'transparent';
-                });
             }
 
             datesContainer.appendChild(dayCell);

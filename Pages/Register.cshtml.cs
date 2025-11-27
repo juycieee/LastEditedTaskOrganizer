@@ -13,11 +13,11 @@ namespace TaskOrganizer.Pages.Register
 {
     public class RegisterModel : PageModel
     {
-        private readonly EmployeeService _employeeService;
+        private readonly EmployeeServices _employeeService;
         private readonly AdminService _adminService;
         private readonly EmailService _emailService;
 
-        public RegisterModel(EmployeeService employeeService, AdminService adminService, EmailService emailService)
+        public RegisterModel(EmployeeServices employeeService, AdminService adminService, EmailService emailService)
         {
             _employeeService = employeeService;
             _adminService = adminService;

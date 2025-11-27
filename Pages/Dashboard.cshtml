@@ -1,6 +1,7 @@
 ﻿@page
-@model IndexModel
+@model TaskOrganizer.Pages.DashboardModel
 @{
+    // Tiyakin na ang Model ay tama: @model TaskOrganizer.Pages.DashboardModel
     ViewData["Title"] = "Dashboard";
     Layout = null;
 }
@@ -18,50 +19,24 @@
         overflow: hidden;
     }
 
-    .color-primary {
-        background-color: #8B453A;
-    }
-    .color-secondary {
-        background-color: #D0B8A8;
-    }
-    .color-accent {
-        background-color: #DFD3C3;
-    }
-    .color-light {
-        background-color: #F8EDE3;
-    }
+    /* ❗ THEME COLORS (TULAD NG SA MYTASKS.CSHTML) ❗ */
+    .color-primary { background-color: #8B453A; } /* Dark Brown */
+    .color-secondary { background-color: #D0B8A8; } /* Light Brown/Tan */
+    .color-accent { background-color: #DFD3C3; }
+    .color-light { background-color: #F8EDE3; }
+    .text-primary { color: #8B453A; }
+    .text-secondary { color: #D0B8A8; }
+    .text-dark { color: #222222; }
+    
+    .sidebar-bg { background-color: #8B453A; }
+    .main-bg { background-color: #F8EDE3; }
+    .card-bg { background-color: white; }
 
-    .text-primary {
-        color: #8B453A;
-    }
-    .text-secondary {
-        color: #D0B8A8;
-    }
-
-    .text-dark {
-        color: #222222;
-    }
-    /* Very dark text for readability */
-
-
-    .sidebar-bg {
-        background-color: #8B453A;
-    }
-    .main-bg {
-        background-color: #F8EDE3;
-    }
-    .card-bg {
-        background-color: white;
-    }
-
-    .link-text {
-        font-size: 1.05rem;
-        font-weight: 500;
-    }
+    .link-text { font-size: 1.05rem; font-weight: 500; }
 
     .active-link {
-        background-color: #D0B8A8; 
-        color: #3A0519; 
+        background-color: #D0B8A8;
+        color: #3A0519;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         font-weight: 700;
     }
@@ -73,37 +48,39 @@
     }
 
     .user-btn {
-        background-color: #DFD3C3; 
-        color: #8B453A; 
+        background-color: #DFD3C3;
+        color: #8B453A;
         font-weight: bold;
         border: 1px solid #D0B8A8;
     }
 
-        .user-btn:hover {
-            background-color: #8B453A; 
-            color: white;
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
+    .user-btn:hover {
+        background-color: #8B453A;
+        color: white;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #8B453A; 
-        border-radius: 20px;
+    .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #8B453A; border-radius: 20px; }
+    .border-primary-accent { border-color: #8B453A; }
+    .text-primary-accent { color: #8B453A; }
+    .modal-backdrop { background-color: rgba(0, 0, 0, 0.6); }
+
+    /* --- CSS for Circular Progress Bar (Donut Chart) --- */
+    .progress-ring {
+        position: relative;
+        display: inline-block;
+        width: 150px; /* Chart size */
+        height: 150px;
     }
 
-    .border-primary-accent {
-        border-color: #8B453A; 
+    .progress-ring svg {
+        transform: rotate(-90deg); /* Start at the top */
+        overflow: visible; /* Tiyakin na makikita ang circle */
     }
 
-    .text-primary-accent {
-        color: #8B453A; 
-    }
-
-    .modal-backdrop {
-        background-color: rgba(0, 0, 0, 0.6);
+    .progress-ring-circle {
+        transition: stroke-dashoffset 0.5s ease-in-out;
     }
 </style>
 
@@ -144,6 +121,7 @@
             </a>
         </div>
     </div>
+    
     <div class="flex-1 main-bg p-8 overflow-y-auto custom-scrollbar">
 
         <div class="flex justify-between items-center mb-8 flex-shrink-0 card-bg p-6 rounded-xl shadow-lg border-t-4 border-secondary">
@@ -152,7 +130,7 @@
                 <p class="text-lg text-gray-500">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
             </div>
             <button class="user-btn text-lg px-5 py-2 rounded-lg font-semibold shadow-md transition duration-150 flex items-center gap-2">
-                <i class="fas fa-user"></i> User
+                <i class="fas fa-user"></i> @Model.EmployeeUsername
             </button>
         </div>
 
@@ -161,60 +139,116 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-primary-accent">
                 <div>
                     <p class="text-gray-500 text-lg">Total Tasks</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.TotalTasksCount</h2>
                     <p class="text-base text-gray-400">All your tasks</p>
                 </div>
-                <div class="text-3xl text-primary-accent opacity-70">
-                    <i class="fas fa-tasks"></i>
-                </div>
+                <div class="text-3xl text-primary-accent opacity-70"><i class="fas fa-tasks"></i></div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-green-500">
                 <div>
                     <p class="text-gray-500 text-lg">Completed</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.CompletedTasksCount</h2>
                     <p class="text-base text-gray-400">Finished tasks</p>
                 </div>
-                <div class="text-3xl text-green-500 opacity-70">
-                    <i class="fas fa-check-circle"></i>
-                </div>
+                <div class="text-3xl text-green-500 opacity-70"><i class="fas fa-check-circle"></i></div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-yellow-500">
                 <div>
                     <p class="text-gray-500 text-lg">Pending</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.PendingTasksCount</h2>
                     <p class="text-base text-gray-400">In progress</p>
                 </div>
-                <div class="text-3xl text-yellow-500 opacity-70">
-                    <i class="fas fa-hourglass-half"></i>
-                </div>
+                <div class="text-3xl text-yellow-500 opacity-70"><i class="fas fa-hourglass-half"></i></div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-500">
                 <div>
                     <p class="text-gray-500 text-lg">High Priority</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.HighPriorityTasksCount</h2>
                     <p class="text-base text-gray-400">Urgent tasks</p>
                 </div>
-                <div class="text-3xl text-red-500 opacity-70">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
+                <div class="text-3xl text-red-500 opacity-70"><i class="fas fa-exclamation-triangle"></i></div>
             </div>
 
         </div>
 
-        <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col flex-grow min-h-[300px]">
-            <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3 mb-6 pb-2 border-b">
-                <i class="fas fa-clipboard-list text-primary"></i> Recent Tasks
-            </h2>
-            <div class="flex flex-col items-center justify-center flex-grow py-12">
-                <i class="fas fa-calendar-times text-gray-400 text-5xl mb-4"></i>
-                <p class="text-gray-700 text-xl font-semibold mb-1">No tasks yet</p>
-                <p class="text-gray-500 text-lg text-center max-w-sm">
-                    Your task list is empty. Add your first task to get started!
-                </p>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col min-h-[400px] lg:col-span-1">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-3 mb-6 pb-2 border-b">
+                    <i class="fas fa-chart-pie text-red-700"></i> My Task Completion
+                </h2>
+
+                <div class="flex items-center justify-center flex-grow py-8">
+                    <div class="flex flex-col items-center">
+                        <div class="progress-ring" id="employeeTaskProgressRing">
+                            <svg width="150" height="150" viewBox="0 0 150 150">
+                                <circle class="text-gray-300"
+                                    stroke="currentColor"
+                                    stroke-width="10"
+                                    fill="transparent"
+                                    r="65"
+                                    cx="75"
+                                    cy="75" />
+                                <circle class="progress-ring-circle text-primary"
+                                    stroke="currentColor"
+                                    stroke-width="10"
+                                    fill="transparent"
+                                    r="65"
+                                    cx="75"
+                                    cy="75"
+                                    style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-4xl font-bold text-primary" id="employeeCompletionPercentage">0%</span>
+                            </div>
+                        </div>
+                        <p class="text-xl font-semibold text-gray-600 mt-6">
+                            Tasks Completed: 
+                            <span id="employeeCompletedTasksCount">@Model.CompletedTasksCount</span>/
+                            <span id="employeeTotalTasksCount">@Model.TotalTasksCount</span>
+                        </p>
+                    </div>
+                </div>
             </div>
+
+            <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col min-h-[400px] lg:col-span-2">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-3 mb-6 pb-2 border-b">
+                    <i class="fas fa-history text-primary"></i> Recent Completed Tasks
+                </h2>
+
+                @if (Model.RecentCompletedTasks.Any())
+                {
+                    <div class="space-y-4 max-h-[300px] overflow-y-auto custom-scrollbar">
+                        @foreach (var task in Model.RecentCompletedTasks)
+                        {
+                            <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-green-500 flex justify-between items-center transition duration-150 hover:shadow-md">
+                                <div>
+                                    <p class="text-lg font-bold text-dark">@task.Title</p>
+                                    <p class="text-sm text-gray-600">Priority: <span class="font-semibold text-primary">@task.Priority</span></p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-medium px-3 py-1 bg-green-100 text-green-700 rounded-full">COMPLETED</span>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Finished: @(task.CompletionDate.HasValue ? task.CompletionDate.Value.ToString("MMM dd, hh:mm tt") : "N/A")
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="flex flex-col items-center justify-center flex-grow py-12">
+                        <i class="fas fa-clipboard-check text-gray-300 text-5xl mb-4"></i>
+                        <p class="text-gray-700 text-xl font-semibold mt-4">No completed tasks recently</p>
+                        <p class="text-lg text-gray-500 text-center max-w-sm">Start finishing your tasks to see history here!</p>
+                    </div>
+                }
+            </div>
+
         </div>
 
     </div>
@@ -261,4 +295,36 @@
         // Hide the modal
         modal.classList.add('hidden');
     }
+
+    // --- NEW: JavaScript for Circular Progress Bar Logic (Employee) ---
+
+    // Function to set the progress bar based on percentage
+    function setEmployeeProgress(percent) {
+        const circle = document.querySelector('#employeeTaskProgressRing .progress-ring-circle');
+        const percentageText = document.getElementById('employeeCompletionPercentage');
+
+        // r = 65, stroke-width = 10, C = 2 * PI * r = 408.4 (Circumference)
+        const circumference = 408.4;
+
+        // Calculate the offset based on percentage
+        const offset = circumference - (percent / 100) * circumference;
+
+        // Apply offset and update text
+        circle.style.strokeDashoffset = offset;
+        percentageText.textContent = `${Math.round(percent)}%`;
+    }
+
+    // --- Data Initialization ---
+    // Kunin ang data mula sa Razor Model (C#)
+    const totalTasks = @Model.TotalTasksCount;
+    const completedTasks = @Model.CompletedTasksCount;
+    const completionRate = @Model.CompletionPercentage; // Ito ay double na (e.g., 33.33)
+
+    // Update the HTML text counts
+    document.getElementById('employeeTotalTasksCount').textContent = totalTasks;
+    document.getElementById('employeeCompletedTasksCount').textContent = completedTasks;
+
+    // Set the progress bar
+    setEmployeeProgress(completionRate);
+    
 </script>

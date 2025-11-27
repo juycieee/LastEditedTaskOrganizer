@@ -9,102 +9,146 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
+    /* Reset and Base Styles */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Segoe UI", sans-serif;
+        font-family: 'Inter', "Segoe UI", sans-serif;
+    }
+
+    /* ************************************************* */
+    /* --- CENTERED LAYOUT --- */
+    /* ************************************************* */
+    html, body {
+        height: 100%;
+        min-height: 100vh;
+        overflow-x: hidden;
     }
 
     body {
-        background: #F9F8F6;
+        background: linear-gradient(90deg, #f3b0f2, #fdf5b9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s;
     }
 
     .register-container {
         width: 100%;
         min-height: 100vh;
         display: flex;
-        align-items: center;
         justify-content: center;
-        padding: 0;
+        align-items: center;
+        padding: 20px;
     }
 
+    /* ************************************************* */
+    /* --- Main Card/Box (MAXIMUM SIZE) --- */
+    /* ************************************************* */
     .register-box {
-        width: 70%;
-        max-width: 950px;
+        width: 95%;
+        max-width: 1100px;
         min-height: 700px;
+        height: auto;
         display: flex;
-        border-radius: 10px;
+        border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 7px 25px rgba(0,0,0,0.25);
+        box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+        background-color: white;
+        transition: box-shadow 0.3s ease-in-out;
     }
 
+    /* ************************************************* */
+    /* --- Left Panel (INFO/IMAGE - Deep Rose BG) --- */
+    /* ************************************************* */
     .left-panel {
         width: 45%;
-        /* Background: Deep Rose */
+        text-align: center;
         background: #704264;
         color: white;
         padding: 60px 40px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        border-radius: 15px 0 0 15px;
     }
 
-        .left-panel h2 {
-            text-align: left;
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
+    .task-image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: auto;
+        margin-top: 60px;
+    }
 
-        .left-panel p {
-            opacity: 0.9;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            font-size: 18px;
-        }
+    .task-image {
+        width: 320px;
+        height: auto;
+    }
 
-        .left-panel .social-icons i {
-            font-size: 30px;
-            margin-right: 20px;
-            color: #DBAFA0;
-            transition: 0.3s;
-        }
+    .left-panel h2 {
+        font-size: 38px;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
 
+    .left-panel p {
+        opacity: 0.9;
+        line-height: 1.7;
+        margin-bottom: 0;
+        font-size: 20px;
+    }
+
+    /* ******************************************** */
+    /* --- Right Panel (FORM - COMPACT INPUTS) --- */
+    /* ******************************************** */
     .right-panel {
         width: 55%;
         background: #DBAFA0;
-        padding: 80px 40px;
+        padding: 50px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        border-radius: 0 15px 15px 0;
     }
 
         .right-panel h3 {
-            font-size: 35px;
+            font-size: 40px;
             text-align: center;
             margin-bottom: 10px;
-            color: black;
+            color: #49243E;
+            font-weight: 700;
         }
 
         .right-panel small {
-            text-align: center;
-            opacity: 0.7;
+            opacity: 0.8;
             display: block;
             margin-bottom: 25px;
+            font-size: 20px;
+            color: #49243E;
         }
 
     .form-group {
-        margin-bottom: 18px;
+        margin-bottom: 15px; /* BINABAAN ang spacing sa pagitan ng inputs */
+        text-align: left;
     }
 
         .form-group input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid #49243E;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: 0.2s;
+            padding: 10px 18px; /* BINABAAN ang padding para lumiit ang textbox (COMPRESSED) */
+            border: 1px solid #49243E;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: white;
+            color: #333;
         }
 
             .form-group input:focus {
                 border-color: #BB8493;
+                box-shadow: 0 0 0 3px rgba(187, 132, 147, 0.4);
                 outline: none;
             }
 
@@ -113,72 +157,122 @@
         background: #49243E;
         border: none;
         color: white;
-        padding: 10px;
-        font-size: 19px;
-        border-radius: 6px;
+        padding: 12px; /* BINABAAN ang padding (USUAL BUTTON SIZE) */
+        font-size: 18px; /* BINABAAN ang font size (USUAL BUTTON SIZE) */
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        border-radius: 8px; /* Ginawang 8px para mas maging typical */
         cursor: pointer;
-        margin-top: 10px;
-        transition: 0.3s;
+        margin-top: 20px;
+        transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     }
 
         .submit-btn:hover {
             background: #704264;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(73, 36, 62, 0.4);
         }
 
     .text-red {
         color: red;
-        font-size: 14px;
+        font-size: 15px;
+        text-align: left;
+        display: block;
+        margin-top: 4px;
+        font-weight: 500;
     }
 
     .role-label {
-        color: #49243E; 
-        font-weight: 600; 
-        font-size: 16px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #49243E;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .role-option-label {
+        font-size: 19px;
+        color: black;
+        font-weight: 400;
     }
 
     .role-radio {
         accent-color: #49243E;
     }
 
+    .role-group {
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
     .login-link-container {
+        margin-top: 30px;
         text-align: center;
-        margin-top: 15px; 
-        font-size: 15px;
+        font-size: 18px;
+        color: #49243E;
     }
 
         .login-link-container a {
-            color: #49243E; 
-            font-weight: 600;
+            color: #49243E;
+            font-weight: bold;
             text-decoration: none;
-            transition: color 0.2s;
+            transition: color 0.3s;
         }
 
             .login-link-container a:hover {
-                color: #704264; 
                 text-decoration: underline;
+                color: #704264;
             }
+
+    /* Responsive adjustments for smaller screens */
+    @@media (max-width: 800px) {
+        .register-box {
+            flex-direction: column;
+            width: 95%;
+            max-width: 450px;
+            min-height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .left-panel, .right-panel {
+            width: 100%;
+            padding: 35px;
+        }
+
+        .left-panel {
+            border-radius: 15px 15px 0 0;
+        }
+
+        .right-panel {
+            border-radius: 0 0 15px 15px;
+        }
+
+        .task-image {
+            width: 280px;
+        }
+    }
 </style>
 
 <div class="register-container">
     <div class="register-box">
 
         <div class="left-panel">
-            <h2>Welcome to Employee Task Organizer</h2>
-            <p>Create account for better way to manage<br />task. Let's keep your goals in line and <br />your days less hectic</p>
-            <div class="social-icons">
-                <i class="fas fa-clipboard-list" title="Tasks"></i>
-                <i class="fas fa-calendar-alt" title="Schedule"></i>
-                <i class="fas fa-check-circle" title="Accomplishments"></i>
-                <i class="fas fa-clock" title="Time Management"></i>
+            <div>
+                <h2>Welcome to Employee Task Organizer</h2>
+                <p>Create account for a better way to manage tasks. Let's keep your goals in line and your days less hectic.</p>
+            </div>
+
+            <div class="task-image-container">
+                <img src="/images/4.png" alt="Task Icon" class="task-image">
             </div>
         </div>
 
         <div class="right-panel">
-            <h3>REGISTER HERE</h3>
+            <h3>CREATE NEW ACCOUNT</h3>
             <small>Organize today. Accomplish more tomorrow.</small>
-            <br />
 
-            <div asp-validation-summary="All" class="text-red mb-3"></div>
+            <div asp-validation-summary="All" class="text-red mb-3" style="text-align:center; font-weight:600;"></div>
 
             <form method="post">
                 <div class="form-group">
@@ -206,7 +300,7 @@
                     <span asp-validation-for="Input.ConfirmPassword" class="text-red"></span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group role-group">
                     <label class="role-label block mb-2">Register as:</label>
                     <div class="flex space-x-8 justify-center">
 
@@ -216,7 +310,7 @@
                                    value="Employee"
                                    checked="checked"
                                    class="role-radio h-4 w-4" />
-                            <span class="ml-2 role-label">Employee</span>
+                            <span class="ml-2 role-option-label">Employee</span>
                         </label>
 
                         <label class="flex items-center cursor-pointer">
@@ -224,7 +318,7 @@
                                    asp-for="Input.Role"
                                    value="Admin"
                                    class="role-radio h-4 w-4" />
-                            <span class="ml-2 role-label">Admin</span>
+                            <span class="ml-2 role-option-label">Admin</span>
                         </label>
                     </div>
                     <span asp-validation-for="Input.Role" class="text-red"></span>

@@ -1,8 +1,10 @@
 ﻿// TaskOrganizer.Services/AdminService.cs
+
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using TaskOrganizer.Models;
-using System.Threading.Tasks; // <--- KRITIKAL: Idinagdag para sa Task return type
+// Tanggalin ang 'using System.Threading.Tasks;' para maiwasan ang conflict,
+// at gagamitin natin ang buong namespace sa baba.
 
 namespace TaskOrganizer.Services
 {
@@ -10,26 +12,28 @@ namespace TaskOrganizer.Services
     {
         private readonly IMongoCollection<Admin> _admins;
 
-        public AdminService(IOptions<MongoDBSettings> settings)
+        // I-a-assume na tama na ang MongoDB setup mo dito
+        public AdminService(IMongoDatabase database)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
-            var database = client.GetDatabase(settings.Value.DatabaseName);
+            // Tanggalin ang pag-configure ng client/database. Diretso na sa pagkuha ng collection.
             _admins = database.GetCollection<Admin>("Admins");
         }
-
-        public async Task<Admin?> GetByEmailAsync(string email)
+        // 1. GetByEmailAsync: Gamitin ang explicit System.Threading.Tasks.Task
+        public async System.Threading.Tasks.Task<Admin?> GetByEmailAsync(string email)
         {
             return await _admins.Find(a => a.Email == email).FirstOrDefaultAsync();
         }
 
-        public async Task CreateAsync(Admin admin)
+        // 2. CreateAsync: Gamitin ang explicit System.Threading.Tasks.Task
+        // Ito ang nagko-cause ng "not all code paths return a value" error dahil sa ambiguity.
+        public async System.Threading.Tasks.Task CreateAsync(Admin admin)
         {
             await _admins.InsertOneAsync(admin);
-            // Walang return statement dahil ang return type ay Task (parang void)
+            // Hindi kailangan ng return statement dahil ang return type ay System.Threading.Tasks.Task (void)
         }
 
-        // Para sa Login Validation
-        public async Task<bool> ValidateLogin(string email, string passwordHash)
+        // 3. ValidateLogin: Gamitin ang explicit System.Threading.Tasks.Task
+        public async System.Threading.Tasks.Task<bool> ValidateLogin(string email, string passwordHash)
         {
             var admin = await _admins.Find(a => a.Email == email && a.PasswordHash == passwordHash)
                                      .FirstOrDefaultAsync();

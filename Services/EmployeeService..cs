@@ -1,37 +1,53 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using TaskOrganizer.Models;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+// Hindi kailangan ng using System.Threading.Tasks; kung gagamit ng explicit System.Threading.Tasks.Task
 
 namespace TaskOrganizer.Services
 {
-    public class EmployeeService
+    public class EmployeeServices
     {
-        private readonly IMongoCollection<Employee> _employees;
+        private readonly IMongoCollection<Employee> _employeeCollection;
 
-        public EmployeeService(IOptions<MongoDBSettings> settings)
+        public EmployeeServices(IMongoDatabase database)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
-            var database = client.GetDatabase(settings.Value.DatabaseName);
-            _employees = database.GetCollection<Employee>("Employees");
+            _employeeCollection = database.GetCollection<Employee>("Employees");
         }
 
-        public async Task<Employee?> GetByEmailAsync(string email)
+        // --- AUTHENTICATION/REGISTER METHODS ---
+
+        // 1. 🔍 GetByEmailAsync
+        public async System.Threading.Tasks.Task<Employee> GetByEmailAsync(string email)
         {
-            return await _employees.Find(e => e.Email == email).FirstOrDefaultAsync();
+            return await _employeeCollection.Find(e => e.Email == email).FirstOrDefaultAsync();
         }
 
-        public async Task CreateAsync(Employee employee)
+        // 2. ➕ CreateAsync
+        public async System.Threading.Tasks.Task CreateAsync(Employee newEmployee)
         {
-            await _employees.InsertOneAsync(employee);
+            await _employeeCollection.InsertOneAsync(newEmployee);
         }
 
-        public async Task<bool> ValidateLogin(string email, string passwordHash)
+        // 3. 🔑 GetValidEmployee (NEW/MODIFIED LOGIC FOR LOGIN CLAIMS)
+        /// <summary>
+        /// Attempts to find and return a valid Employee object based on email and password hash.
+        /// </summary>
+        /// <param name="email">The employee's login email.</param>
+        /// <param name="passwordHash">The hashed password.</param>
+        /// <returns>The Employee object if found and valid, otherwise null.</returns>
+        public async System.Threading.Tasks.Task<Employee?> GetValidEmployee(string email, string passwordHash)
         {
-            var employee = await _employees.Find(e => e.Email == email && e.PasswordHash == passwordHash)
-                                         .FirstOrDefaultAsync();
-            return employee != null;
+            var filter = Builders<Employee>.Filter.Eq(e => e.Email, email) &
+                         Builders<Employee>.Filter.Eq(e => e.PasswordHash, passwordHash);
+
+            // Nagbabalik ng Employee object (na may Id at Name) o null kung hindi nag-match
+            return await _employeeCollection.Find(filter).FirstOrDefaultAsync();
         }
 
+        // 4. 📚 GetAllEmployeesAsync
+        public async System.Threading.Tasks.Task<List<Employee>> GetAllEmployeesAsync()
+        {
+            return await _employeeCollection.Find(_ => true).ToListAsync();
+        }
     }
 }

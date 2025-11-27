@@ -20,12 +20,15 @@
     .color-primary {
         background-color: #850E35;
     }
+
     .color-secondary {
         background-color: #EE6983;
     }
+
     .color-accent {
         background-color: #FFC4C4;
     }
+
     .color-light {
         background-color: #FCF5EE;
     }
@@ -43,7 +46,7 @@
     }
 
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #850E35; 
+        background-color: #850E35;
         border-radius: 20px;
     }
 
@@ -61,7 +64,7 @@
     }
 
     .sidebar-link-text {
-        font-size: 1.05rem; 
+        font-size: 1.05rem;
         font-weight: 500;
     }
 
@@ -100,6 +103,22 @@
 
     .modal-backdrop {
         background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* --- NEW: CSS for Circular Progress Bar (Donut Chart) --- */
+    .progress-ring {
+        position: relative;
+        display: inline-block;
+        width: 150px; /* Chart size */
+        height: 150px;
+    }
+
+        .progress-ring svg {
+            transform: rotate(-90deg); /* Start at the top */
+        }
+
+    .progress-ring-circle {
+        transition: stroke-dashoffset 0.5s ease-in-out;
     }
 </style>
 
@@ -149,9 +168,8 @@
             <div>
                 <h1 class="text-4xl font-bold text-gray-800">Dashboard Overview</h1> <p class="text-lg text-gray-500">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
             </div>
-            <button class="admin-btn text-lg px-5 py-2 rounded-lg font-semibold shadow-md transition duration-150 flex items-center gap-2">
+            <div class="admin-btn text-lg px-5 py-2 rounded-lg font-semibold shadow-md flex items-center gap-2">
                 <i class="fas fa-user-shield"></i> Admin
-            </button>
         </div>
 
         <div class="grid grid-cols-4 gap-6 mb-8 flex-shrink-0">
@@ -198,17 +216,56 @@
 
         </div>
 
-        <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col flex-grow min-h-[300px]">
-            <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3 mb-6 pb-2 border-b">
-                <i class="fas fa-chart-bar text-secondary"></i> Employee Performance
-            </h2>
+        <div class="grid grid-cols-2 gap-6">
 
-            <div class="flex flex-col items-center justify-center flex-grow py-12">
-                <i class="fas fa-users text-gray-300 text-5xl mb-4"></i>
-                <p class="text-gray-500 text-xl font-semibold mb-1">No employees yet</p> <p class="text-gray-400 text-lg text-center max-w-sm">
-                    Add employees to start tracking performance
-                </p>
+            <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col min-h-[400px]">
+                <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3 mb-6 pb-2 border-b">
+                    <i class="fas fa-chart-bar text-secondary"></i> Employee Performance
+                </h2>
+
+                <div class="flex flex-col items-center justify-center flex-grow py-12">
+                    <i class="fas fa-users text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500 text-xl font-semibold mb-1">No employees yet</p> <p class="text-gray-400 text-lg text-center max-w-sm">
+                        Add employees to start tracking performance
+                    </p>
+                </div>
             </div>
+
+            <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col min-h-[400px]">
+                <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3 mb-6 pb-2 border-b">
+                    <i class="fas fa-tasks text-primary"></i> Overall Task Completion
+                </h2>
+
+                <div class="flex items-center justify-center flex-grow py-8">
+                    <div class="flex flex-col items-center">
+                        <div class="progress-ring" id="taskProgressRing">
+                            <svg width="150" height="150" viewBox="0 0 150 150">
+                                <circle class="text-gray-300"
+                                        stroke="currentColor"
+                                        stroke-width="10"
+                                        fill="transparent"
+                                        r="65"
+                                        cx="75"
+                                        cy="75" />
+                                <circle class="progress-ring-circle text-primary"
+                                        stroke="currentColor"
+                                        stroke-width="10"
+                                        fill="transparent"
+                                        r="65"
+                                        cx="75"
+                                        cy="75"
+                                        style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-4xl font-bold text-primary" id="completionPercentage">0%</span>
+                            </div>
+                        </div>
+                        <p class="text-xl font-semibold text-gray-600 mt-6">Tasks Completed: <span id="completedTasksCount">0</span>/<span id="totalTasksCount">0</span></p>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
@@ -254,5 +311,37 @@
     function hideLogoutModal() {
         // Hide the modal
         modal.classList.add('hidden');
+    }
+
+    // --- NEW: JavaScript for Circular Progress Bar Logic ---
+
+    // Function to set the progress bar based on percentage
+    function setProgress(percent) {
+        const circle = document.querySelector('.progress-ring-circle');
+        const percentageText = document.getElementById('completionPercentage');
+
+        // r = 65, stroke-width = 10, C = 2 * PI * r = 408.4
+        const circumference = 408.4;
+
+        // Calculate the offset
+        const offset = circumference - (percent / 100) * circumference;
+
+        // Apply offset and update text
+        circle.style.strokeDashoffset = offset;
+        percentageText.textContent = `${Math.round(percent)}%`;
+    }
+
+    // Example Usage (You will replace this with real data from your backend)
+    const totalTasks = 10;
+    const completedTasks = 7;
+
+    document.getElementById('totalTasksCount').textContent = totalTasks;
+    document.getElementById('completedTasksCount').textContent = completedTasks;
+
+    if (totalTasks > 0) {
+        const completionRate = (completedTasks / totalTasks) * 100;
+        setProgress(completionRate);
+    } else {
+        setProgress(0);
     }
 </script>

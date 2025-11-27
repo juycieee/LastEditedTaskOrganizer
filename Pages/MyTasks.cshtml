@@ -1,5 +1,5 @@
 ﻿@page
-@model MyTasksModel
+@model TaskOrganizer.Pages.MyTasksModel
 @{
     ViewData["Title"] = "My Tasks";
     Layout = null;
@@ -17,15 +17,19 @@
         overflow: hidden;
     }
 
+    /* ❗ INAYOS ANG KULAY PARA SA SIDEBAR AT THEME ❗ */
     .color-primary {
         background-color: #8B453A;
     }
+    /* Dark Brown */
     .color-secondary {
         background-color: #D0B8A8;
     }
+    /* Light Brown/Tan */
     .color-accent {
         background-color: #DFD3C3;
     }
+
     .color-light {
         background-color: #F8EDE3;
     }
@@ -33,6 +37,7 @@
     .text-primary {
         color: #8B453A;
     }
+
     .text-secondary {
         color: #D0B8A8;
     }
@@ -40,12 +45,15 @@
     .text-dark {
         color: #222222;
     }
+
     .sidebar-bg {
         background-color: #8B453A;
     }
+    /* Ito ang nagpapakulay sa sidebar */
     .main-bg {
         background-color: #F8EDE3;
     }
+
     .card-bg {
         background-color: white;
     }
@@ -56,8 +64,8 @@
     }
 
     .active-link {
-        background-color: #D0B8A8; 
-        color: #3A0519; 
+        background-color: #D0B8A8;
+        color: #3A0519;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         font-weight: 700;
     }
@@ -70,7 +78,7 @@
 
     .user-btn {
         background-color: #D0B8A8;
-        color: #8B453A; 
+        color: #8B453A;
         font-weight: bold;
         border: 1px solid #DFD3C3;
     }
@@ -97,6 +105,22 @@
     .modal-backdrop {
         background-color: rgba(0, 0, 0, 0.6);
     }
+
+    /* Estilo para sa Mark as Done button */
+    .mark-done-btn {
+        background-color: #10B981; /* Green-500 */
+        color: white;
+    }
+
+        .mark-done-btn:hover:not(:disabled) {
+            background-color: #059669; /* Green-600 */
+        }
+
+        .mark-done-btn:disabled {
+            background-color: #9CA3AF; /* Gray-400 */
+            cursor: not-allowed;
+        }
+
 </style>
 
 <div class="flex h-screen overflow-hidden">
@@ -136,6 +160,7 @@
             </a>
         </div>
     </div>
+
     <div class="flex-1 main-bg p-8 overflow-y-auto custom-scrollbar">
 
         <div class="flex justify-between items-center mb-8 flex-shrink-0">
@@ -144,7 +169,7 @@
                 <p class="text-lg text-gray-500">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
             </div>
             <button class="user-btn text-lg px-5 py-2 rounded-lg font-semibold shadow-md transition duration-150 flex items-center gap-2">
-                <i class="fas fa-user"></i> User
+                <i class="fas fa-user"></i> @Model.EmployeeUsername
             </button>
         </div>
 
@@ -153,45 +178,37 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-primary-accent">
                 <div>
                     <p class="text-gray-500 text-lg">Total Tasks</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.TotalTasksCount</h2>
                     <p class="text-base text-gray-400">All your tasks</p>
                 </div>
-                <div class="text-3xl text-primary-accent opacity-70">
-                    <i class="fas fa-tasks"></i>
-                </div>
+                <div class="text-3xl text-primary-accent opacity-70"><i class="fas fa-tasks"></i></div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-green-500">
                 <div>
                     <p class="text-gray-500 text-lg">Completed</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.CompletedTasksCount</h2>
                     <p class="text-base text-gray-400">Finished tasks</p>
                 </div>
-                <div class="text-3xl text-green-500 opacity-70">
-                    <i class="fas fa-check-circle"></i>
-                </div>
+                <div class="text-3xl text-green-500 opacity-70"><i class="fas fa-check-circle"></i></div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-yellow-500">
                 <div>
                     <p class="text-gray-500 text-lg">Pending</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.PendingTasksCount</h2>
                     <p class="text-base text-gray-400">In progress</p>
                 </div>
-                <div class="text-3xl text-yellow-500 opacity-70">
-                    <i class="fas fa-hourglass-half"></i>
-                </div>
+                <div class="text-3xl text-yellow-500 opacity-70"><i class="fas fa-hourglass-half"></i></div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-500">
                 <div>
                     <p class="text-gray-500 text-lg">High Priority</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.HighPriorityTasksCount</h2>
                     <p class="text-base text-gray-400">Urgent tasks</p>
                 </div>
-                <div class="text-3xl text-red-500 opacity-70">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
+                <div class="text-3xl text-red-500 opacity-70"><i class="fas fa-exclamation-triangle"></i></div>
             </div>
 
         </div>
@@ -219,11 +236,71 @@
                 </button>
             </div>
 
-            <div class="text-center py-10 flex flex-col items-center justify-center flex-grow">
-                <i class="fas fa-calendar-times text-gray-300 text-5xl mb-4"></i>
-                <p class="text-gray-700 text-xl font-semibold mt-4">No tasks found</p>
-                <p class="text-lg text-gray-500">You currently have no tasks assigned.</p>
-            </div>
+            @if (Model.CurrentPendingTasks.Any())
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach (var task in Model.CurrentPendingTasks.OrderBy(t => t.DueDate).ToList())
+                    {
+                        string assignedByName = "System Admin";
+                        bool isCompleted = task.Status == "Completed";
+
+                        <div class="card-bg p-6 rounded-xl shadow-lg border-l-4
+                                             @(task.Priority == "High" ? "border-red-500" :
+                                                                                 task.Priority == "Medium" ? "border-yellow-500" :
+                                                                                 "border-green-500")">
+
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-xl font-bold text-dark">@task.Title</h3>
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full uppercase
+                                                        @(isCompleted ? "bg-green-100 text-green-700" :
+                                                                                                      task.Status == "In Progress" ? "bg-yellow-100 text-yellow-700" :
+                                                                                                      "bg-red-100 text-red-700")">
+                            @task.Status
+                        </span>
+                    </div>
+
+                            <p class="text-gray-600 mb-4 text-sm">@task.Description</p>
+
+                            <div class="text-sm space-y-1 mb-4 border-t pt-3">
+
+                        @if (task.DueDate.HasValue)
+                                {
+                                    <p><strong>Due Date:</strong> @task.DueDate.Value.ToString("MMM dd, yyyy")
+                                    </p>
+                                    <p><strong>Due Time:</strong> @task.DueDate.Value.ToString("hh:mm tt")
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p><strong>Due Date:</strong> N/A</p>
+                                }
+                                <p><strong>Priority:</strong> <span class="font-semibold text-primary">@task.Priority</span></p>
+                                <p><strong>Assigned By:</strong> @assignedByName</p>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <form method="post" asp-page-handler="MarkAsComplete" asp-route-id="@task.Id" class="w-full">
+                                    <button type="submit"
+                                            class="w-full text-sm px-4 py-2 rounded-lg transition duration-150 flex items-center justify-center gap-2 mark-done-btn"
+                                            @(isCompleted ? "disabled" : "")
+                                            title="@(isCompleted ? "Task is already complete" : "Mark this task as complete")">
+                                        <i class="fas fa-check-circle"></i>
+                                        @(isCompleted ? "Completed" : "Mark as Done")
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-10 flex flex-col items-center justify-center flex-grow">
+                    <i class="fas fa-calendar-times text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-700 text-xl font-semibold mt-4">No pending tasks found</p>
+                    <p class="text-lg text-gray-500">You currently have no tasks in progress.</p>
+                </div>
+            }
         </div>
 
     </div>
@@ -231,7 +308,6 @@
 
 <div id="logoutModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center transition-opacity duration-300 ease-out">
     <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-sm transform transition-all duration-300 ease-out scale-95">
-
         <div class="text-center mb-6">
             <div class="flex justify-center mb-3">
                 <i class="fas fa-exclamation-triangle text-secondary text-4xl"></i>
@@ -239,35 +315,27 @@
             <h4 class="text-xl font-bold text-gray-800 mb-1">Are you sure?</h4>
             <p class="text-base text-gray-500">You will be redirected to the login page.</p>
         </div>
-
         <div class="space-y-3">
             <a href="/Login" class="block w-full text-center color-primary text-white py-2 rounded-lg font-semibold hover:bg-secondary hover:text-dark transition duration-150">
                 Yes, Log out
             </a>
-
             <button onclick="hideLogoutModal()" class="block w-full text-center border-2 border-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-100 transition duration-150">
                 Cancel
             </button>
         </div>
-
     </div>
 </div>
 
 <script>
-    // Get the modal element
+    // JS for Logout Modal
     const modal = document.getElementById('logoutModal');
 
-    // Function to show the modal
     function showLogoutModal(event) {
-        // Stop the link from navigating immediately
         event.preventDefault();
-        // Display the modal
         modal.classList.remove('hidden');
     }
 
-    // Function to hide the modal
     function hideLogoutModal() {
-        // Hide the modal
         modal.classList.add('hidden');
     }
 </script>
