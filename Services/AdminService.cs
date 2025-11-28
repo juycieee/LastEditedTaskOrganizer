@@ -1,10 +1,5 @@
-﻿// TaskOrganizer.Services/AdminService.cs
-
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using TaskOrganizer.Models;
-// Tanggalin ang 'using System.Threading.Tasks;' para maiwasan ang conflict,
-// at gagamitin natin ang buong namespace sa baba.
 
 namespace TaskOrganizer.Services
 {
@@ -12,31 +7,37 @@ namespace TaskOrganizer.Services
     {
         private readonly IMongoCollection<Admin> _admins;
 
-        // I-a-assume na tama na ang MongoDB setup mo dito
         public AdminService(IMongoDatabase database)
         {
-            // Tanggalin ang pag-configure ng client/database. Diretso na sa pagkuha ng collection.
+            // Pagkuha ng 'Admins' collection mula sa MongoDB
             _admins = database.GetCollection<Admin>("Admins");
         }
-        // 1. GetByEmailAsync: Gamitin ang explicit System.Threading.Tasks.Task
+
+        // ✅ IDINAGDAG: Method para kunin ang Admin object (Ito ang nagreresolve sa 'GetValidAdmin' error)
+        public async System.Threading.Tasks.Task<Admin?> GetValidAdmin(string email, string passwordHash)
+        {
+            // Maghahanap ng Admin na may tugmang email at password hash
+            return await _admins
+                .Find(admin => admin.Email == email && admin.PasswordHash == passwordHash)
+                .FirstOrDefaultAsync();
+        }
+
+        // 1. GetByEmailAsync: 
         public async System.Threading.Tasks.Task<Admin?> GetByEmailAsync(string email)
         {
             return await _admins.Find(a => a.Email == email).FirstOrDefaultAsync();
         }
 
-        // 2. CreateAsync: Gamitin ang explicit System.Threading.Tasks.Task
-        // Ito ang nagko-cause ng "not all code paths return a value" error dahil sa ambiguity.
+        // 2. CreateAsync: 
         public async System.Threading.Tasks.Task CreateAsync(Admin admin)
         {
             await _admins.InsertOneAsync(admin);
-            // Hindi kailangan ng return statement dahil ang return type ay System.Threading.Tasks.Task (void)
         }
 
-        // 3. ValidateLogin: Gamitin ang explicit System.Threading.Tasks.Task
+        // 3. ValidateLogin: Inayos para gamitin ang GetValidAdmin
         public async System.Threading.Tasks.Task<bool> ValidateLogin(string email, string passwordHash)
         {
-            var admin = await _admins.Find(a => a.Email == email && a.PasswordHash == passwordHash)
-                                     .FirstOrDefaultAsync();
+            var admin = await GetValidAdmin(email, passwordHash);
             return admin != null;
         }
     }

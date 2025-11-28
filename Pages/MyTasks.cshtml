@@ -1,31 +1,32 @@
 ﻿@page
-@model TaskOrganizer.Pages.MyTasksModel
+@model MyTasksModel
 @{
     ViewData["Title"] = "My Tasks";
     Layout = null;
 }
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dcZ6a6u+QHbX5gP0F0ZQ/5DwC1ElGfFY7u1y6m3Oa4k5+HxJ9y8Lzr/6qImQnP+mF8xA6djLM0h+4q45X+3xKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" xintegrity="sha512-dcZ6a6u+QHbX5gP0F0ZQ/5DwC1ElGfFY7u1y6m3Oa4k5+HxJ9y8Lzr/6qImQnP+mF8xA6djLM0h+4q45X+3xKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
+    /* ❗ CSS RESET ❗ */
     body, html {
         margin: 0 !important;
         padding: 0 !important;
         height: 100%;
         width: 100%;
         overflow: hidden;
+        font-family: 'Inter', sans-serif;
     }
 
-    /* ❗ INAYOS ANG KULAY PARA SA SIDEBAR AT THEME ❗ */
     .color-primary {
         background-color: #8B453A;
     }
-    /* Dark Brown */
+
     .color-secondary {
         background-color: #D0B8A8;
     }
-    /* Light Brown/Tan */
+
     .color-accent {
         background-color: #DFD3C3;
     }
@@ -38,18 +39,10 @@
         color: #8B453A;
     }
 
-    .text-secondary {
-        color: #D0B8A8;
-    }
-
-    .text-dark {
-        color: #222222;
-    }
-
     .sidebar-bg {
         background-color: #8B453A;
     }
-    /* Ito ang nagpapakulay sa sidebar */
+
     .main-bg {
         background-color: #F8EDE3;
     }
@@ -102,25 +95,42 @@
         border-color: #8B453A;
     }
 
-    .modal-backdrop {
-        background-color: rgba(0, 0, 0, 0.6);
+    .text-primary-accent {
+        color: #8B453A;
     }
 
-    /* Estilo para sa Mark as Done button */
-    .mark-done-btn {
-        background-color: #10B981; /* Green-500 */
-        color: white;
+    /* Custom Status Badges */
+    .status-badge-pending {
+        background-color: #ffedd5;
+        color: #f97316;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
     }
 
-        .mark-done-btn:hover:not(:disabled) {
-            background-color: #059669; /* Green-600 */
-        }
+    .status-badge-inprogress {
+        background-color: #fef9c3;
+        color: #eab308;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+    }
 
-        .mark-done-btn:disabled {
-            background-color: #9CA3AF; /* Gray-400 */
-            cursor: not-allowed;
-        }
+    .status-badge-completed {
+        background-color: #d1fae5;
+        color: #10b981;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+    }
 
+    .status-badge-overdue { /* Overdue Badge Style */
+        background-color: #fee2e2; /* Light Red */
+        color: #ef4444; /* Bright Red */
+        font-weight: 700;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+    }
 </style>
 
 <div class="flex h-screen overflow-hidden">
@@ -137,7 +147,7 @@
                 <span class="link-text">Dashboard</span>
             </a>
 
-            <a href="/MyTasks" class="flex items-center space-x-3 px-4 py-3 rounded-xl active-link">
+            <a href="/MyTasks" class="flex items-center space-x-3 px-4 py-3 rounded-xl active-link transition duration-150">
                 <i class="fas fa-tasks w-5"></i>
                 <span class="link-text">My Tasks</span>
             </a>
@@ -147,7 +157,7 @@
                 <span class="link-text">Calendar</span>
             </a>
 
-            <a href="/Reports" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover-link transition duration-150 mb-4 text-white/90 hover:text-dark">
+            <a href="/Reports" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover-link transition duration-150 text-white/90 hover:text-dark">
                 <i class="fas fa-chart-bar w-5"></i>
                 <span class="link-text">Reports</span>
             </a>
@@ -160,7 +170,6 @@
             </a>
         </div>
     </div>
-
     <div class="flex-1 main-bg p-8 overflow-y-auto custom-scrollbar">
 
         <div class="flex justify-between items-center mb-8 flex-shrink-0">
@@ -181,7 +190,9 @@
                     <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.TotalTasksCount</h2>
                     <p class="text-base text-gray-400">All your tasks</p>
                 </div>
-                <div class="text-3xl text-primary-accent opacity-70"><i class="fas fa-tasks"></i></div>
+                <div class="text-3xl text-primary-accent opacity-70">
+                    <i class="fas fa-tasks"></i>
+                </div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-green-500">
@@ -190,7 +201,9 @@
                     <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.CompletedTasksCount</h2>
                     <p class="text-base text-gray-400">Finished tasks</p>
                 </div>
-                <div class="text-3xl text-green-500 opacity-70"><i class="fas fa-check-circle"></i></div>
+                <div class="text-3xl text-green-500 opacity-70">
+                    <i class="fas fa-check-circle"></i>
+                </div>
             </div>
 
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-yellow-500">
@@ -199,115 +212,131 @@
                     <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.PendingTasksCount</h2>
                     <p class="text-base text-gray-400">In progress</p>
                 </div>
-                <div class="text-3xl text-yellow-500 opacity-70"><i class="fas fa-hourglass-half"></i></div>
+                <div class="text-3xl text-yellow-500 opacity-70">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
             </div>
 
-            <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-500">
+            <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-600">
                 <div>
-                    <p class="text-gray-500 text-lg">High Priority</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.HighPriorityTasksCount</h2>
-                    <p class="text-base text-gray-400">Urgent tasks</p>
+                    <p class="text-gray-500 text-lg">Missing/Overdue</p>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.OverdueTasksCount</h2>
+                    <p class="text-base text-gray-400">Past due tasks</p>
                 </div>
-                <div class="text-3xl text-red-500 opacity-70"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="text-3xl text-red-600 opacity-70">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
             </div>
 
         </div>
+        <div class="card-bg p-8 rounded-xl shadow-lg min-h-full">
+            <h3 class="text-2xl font-semibold mb-6 pb-2 text-gray-800">All My Tasks</h3>
 
-        <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col flex-grow min-h-[400px]">
-            <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3 mb-6 pb-2 border-b">
-                <i class="fas fa-clipboard-list text-primary"></i> All My Tasks
-            </h2>
-
-            <div class="flex items-center gap-4 mb-6 border-b pb-4">
-                <select class="border p-2 rounded-lg text-gray-700">
-                    <option>All Tasks</option>
-                    <option>Completed</option>
-                    <option>Pending</option>
-                </select>
-                <select class="border p-2 rounded-lg text-gray-700">
-                    <option>All Priorities</option>
-                    <option>High</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                </select>
-                <a class="text-secondary font-medium hover:text-primary transition duration-150" href="#">Clear Filters</a>
-                <button class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary hover:text-dark transition duration-150 ml-auto flex items-center gap-2">
-                    <i class="fas fa-plus"></i> Add New Task
-                </button>
+            <div class="flex items-center space-x-4 mb-8 text-gray-600">
+                <span class="font-medium">All Tasks</span>
+                <span class="text-gray-400">|</span>
+                <span class="font-medium">All Priorities</span>
+                <span class="text-gray-400">|</span>
+                <span class="text-primary-accent font-medium cursor-pointer">Clear Filters</span>
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-            @if (Model.CurrentPendingTasks.Any())
-            {
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach (var task in Model.CurrentPendingTasks.OrderBy(t => t.DueDate).ToList())
+                @if (Model.CurrentPendingTasks.Any())
+                {
+                    @foreach (var task in Model.CurrentPendingTasks)
                     {
-                        string assignedByName = "System Admin";
-                        bool isCompleted = task.Status == "Completed";
+                        // Logic para sa Status
+                        string displayStatus = task.Status;
+                        string statusBadgeClass = task.Status == "Pending" ? "status-badge-pending" : "status-badge-inprogress";
+                        string statusDisplay = task.Status;
 
-                        <div class="card-bg p-6 rounded-xl shadow-lg border-l-4
-                                             @(task.Priority == "High" ? "border-red-500" :
-                                                                                 task.Priority == "Medium" ? "border-yellow-500" :
-                                                                                 "border-green-500")">
+                        // I-check kung Overdue ito (Ginamit ang TaskStatuses dictionary)
+                        if (Model.TaskStatuses.ContainsKey(task.Id!) && Model.TaskStatuses[task.Id!] == "Overdue")
+                        {
+                            statusBadgeClass = "status-badge-overdue"; // Red badge
+                            statusDisplay = "Overdue"; // Ang display text
+                            displayStatus = "Overdue"; // I-set ang display status
+                        }
 
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-xl font-bold text-dark">@task.Title</h3>
-                                <span class="px-3 py-1 text-xs font-semibold rounded-full uppercase
-                                                        @(isCompleted ? "bg-green-100 text-green-700" :
-                                                                                                      task.Status == "In Progress" ? "bg-yellow-100 text-yellow-700" :
-                                                                                                      "bg-red-100 text-red-700")">
-                            @task.Status
-                        </span>
-                    </div>
+                        string priorityText = task.Priority == "High" ? "text-red-500 font-bold" : (task.Priority == "Medium" ? "text-yellow-600 font-semibold" : "text-green-600");
 
-                            <p class="text-gray-600 mb-4 text-sm">@task.Description</p>
+                        // KUNIN ANG ASSIGNER NAME
+                        string assignerName = "System Admin"; // Default fallback
+                        if (!string.IsNullOrEmpty(task.AssignerId) && Model.EmployeeIdToNameMap.ContainsKey(task.AssignerId))
+                        {
+                            assignerName = Model.EmployeeIdToNameMap[task.AssignerId];
+                        }
 
-                            <div class="text-sm space-y-1 mb-4 border-t pt-3">
+                        // I-check kung ang task ay Overdue para sa border color
+                        string borderClass = displayStatus == "Overdue" ? "border-red-500" : "border-primary-accent";
 
-                        @if (task.DueDate.HasValue)
-                                {
-                                    <p><strong>Due Date:</strong> @task.DueDate.Value.ToString("MMM dd, yyyy")
+                        <div class="card-bg p-6 rounded-xl shadow-md border-t-4 @borderClass flex flex-col justify-between hover:shadow-xl transition duration-200">
+                            <div>
+                                <div class="flex justify-between items-start mb-3">
+                                    <h4 class="text-lg font-bold text-gray-800 mr-4">@task.Title</h4>
+                                    <span class="@statusBadgeClass text-xs uppercase flex-shrink-0">@statusDisplay</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4 h-12 overflow-hidden">@task.Description</p>
+
+                                <div class="space-y-2 text-sm text-gray-700 mt-4">
+                                    @if (task.DueDate.HasValue)
+                                    {
+                                        <p class="flex items-center gap-2">
+                                            <i class="fas fa-calendar-alt @(displayStatus == "Overdue" ? "text-red-500" : "text-primary-accent") w-4"></i>
+                                            <strong>Due:</strong>
+                                            <span>@task.DueDate.Value.ToString("MMM dd, yyyy")</span>
+                                            <span class="font-bold @(displayStatus == "Overdue" ? "text-red-700" : "text-gray-700")">(@task.DueDate.Value.ToString("hh:mm tt"))</span>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="flex items-center gap-2">
+                                            <i class="fas fa-calendar-alt text-primary-accent w-4"></i>
+                                            <strong>Due Date:</strong>
+                                            <span class="text-gray-400">No Date Set</span>
+                                        </p>
+                                    }
+
+                                    <p class="flex items-center gap-2">
+                                        <i class="fas fa-fire-alt @(task.Priority == "High" ? "text-red-500" : "text-primary-accent") w-4"></i>
+                                        <strong>Priority:</strong>
+                                        <span class="@priorityText">@task.Priority</span>
                                     </p>
-                                    <p><strong>Due Time:</strong> @task.DueDate.Value.ToString("hh:mm tt")
+
+                                    <p class="flex items-center gap-2">
+                                        <i class="fas fa-user-shield text-primary-accent w-4"></i>
+                                        <strong>Assigned By:</strong>
+                                        <span class="font-semibold text-gray-800">@assignerName</span>
                                     </p>
-                                }
-                                else
-                                {
-                                    <p><strong>Due Date:</strong> N/A</p>
-                                }
-                                <p><strong>Priority:</strong> <span class="font-semibold text-primary">@task.Priority</span></p>
-                                <p><strong>Assigned By:</strong> @assignedByName</p>
+                                </div>
                             </div>
 
-                            <div class="flex justify-end">
-                                <form method="post" asp-page-handler="MarkAsComplete" asp-route-id="@task.Id" class="w-full">
-                                    <button type="submit"
-                                            class="w-full text-sm px-4 py-2 rounded-lg transition duration-150 flex items-center justify-center gap-2 mark-done-btn"
-                                            @(isCompleted ? "disabled" : "")
-                                            title="@(isCompleted ? "Task is already complete" : "Mark this task as complete")">
-                                        <i class="fas fa-check-circle"></i>
-                                        @(isCompleted ? "Completed" : "Mark as Done")
-                                    </button>
-                                </form>
-                            </div>
+                            <form method="post" asp-page-handler="MarkAsComplete">
+                                <input type="hidden" name="id" value="@task.Id" />
+                                <button type="submit" class="w-full mt-4 bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition duration-150 shadow-md">
+                                    <i class="fas fa-check-square mr-2"></i> Mark as Done
+                                </button>
+                            </form>
                         </div>
                     }
-                </div>
-            }
-            else
-            {
-                <div class="text-center py-10 flex flex-col items-center justify-center flex-grow">
-                    <i class="fas fa-calendar-times text-gray-300 text-5xl mb-4"></i>
-                    <p class="text-gray-700 text-xl font-semibold mt-4">No pending tasks found</p>
-                    <p class="text-lg text-gray-500">You currently have no tasks in progress.</p>
-                </div>
-            }
-        </div>
+                }
+                else
+                {
+                    <div class="col-span-full text-center py-12 text-gray-500 border-2 border-dashed border-gray-300 rounded-xl">
+                        <i class="fas fa-box-open text-gray-300 text-4xl mb-3"></i>
+                        <p class="text-lg font-medium">Walang nakabinbing tasks.</p>
+                        <p class="text-sm">Maaari kang makipag-ugnayan sa iyong Admin para sa mga bagong assignment.</p>
+                    </div>
+                }
+            </div>
 
+        </div>
     </div>
 </div>
 
 <div id="logoutModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center transition-opacity duration-300 ease-out">
     <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-sm transform transition-all duration-300 ease-out scale-95">
+
         <div class="text-center mb-6">
             <div class="flex justify-center mb-3">
                 <i class="fas fa-exclamation-triangle text-secondary text-4xl"></i>
@@ -315,27 +344,34 @@
             <h4 class="text-xl font-bold text-gray-800 mb-1">Are you sure?</h4>
             <p class="text-base text-gray-500">You will be redirected to the login page.</p>
         </div>
+
         <div class="space-y-3">
             <a href="/Login" class="block w-full text-center color-primary text-white py-2 rounded-lg font-semibold hover:bg-secondary hover:text-dark transition duration-150">
                 Yes, Log out
             </a>
+
             <button onclick="hideLogoutModal()" class="block w-full text-center border-2 border-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-100 transition duration-150">
                 Cancel
             </button>
         </div>
+
     </div>
 </div>
-
 <script>
-    // JS for Logout Modal
+    // Get the modal element
     const modal = document.getElementById('logoutModal');
 
+    // Function to show the modal (for Logout)
     function showLogoutModal(event) {
+        // Stop the link from navigating immediately
         event.preventDefault();
+        // Display the modal
         modal.classList.remove('hidden');
     }
 
+    // Function to hide the modal (for Logout)
     function hideLogoutModal() {
+        // Hide the modal
         modal.classList.add('hidden');
     }
 </script>

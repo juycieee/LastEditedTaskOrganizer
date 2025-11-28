@@ -2,67 +2,127 @@
 using TaskOrganizer.Models;
 using TaskOrganizer.Services;
 using System.Linq;
-using System.Security.Claims; // ❗ IMPORTANTE: Para makuha ang Claims
+using System.Security.Claims;
+using System.Collections.Generic; // Added for List
+using System; // Added for DateTime and TimeZoneInfo
+using TaskOrganizer.Models; // Ensure AppTask is correctly referenced
+using AppTask = TaskOrganizer.Models.Task; // Use alias to avoid conflict
 
 namespace TaskOrganizer.Pages
 {
     public class DashboardModel : PageModel
     {
         private readonly TaskService _taskService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        // Removed: IHttpContextAccessor is not strictly needed here if we use User property
+        // private readonly IHttpContextAccessor _httpContextAccessor; 
 
         // Properties para sa Summary Cards
         public int TotalTasksCount { get; set; }
         public int CompletedTasksCount { get; set; }
         public int PendingTasksCount { get; set; }
         public int HighPriorityTasksCount { get; set; }
-        // Ngayon, ang EmployeeUsername ay kukunin ang 'Name' Claim, hindi Email.
+
+        // ❗ BAGONG PROPERTY: Missing/Overdue Tasks Count ❗
+        public int OverdueTasksCount { get; set; }
+
         public string EmployeeUsername { get; set; } = "User";
 
-        public List<TaskOrganizer.Models.Task> RecentCompletedTasks { get; set; } = new List<TaskOrganizer.Models.Task>();
+        public List<AppTask> RecentCompletedTasks { get; set; } = new List<AppTask>();
         public double CompletionPercentage { get; set; } = 0;
 
-        public DashboardModel(TaskService taskService, IHttpContextAccessor httpContextAccessor)
+        public DashboardModel(TaskService taskService)
         {
             _taskService = taskService;
-            _httpContextAccessor = httpContextAccessor;
+            // No need to inject IHttpContextAccessor if not used
+        }
+
+        // Helper Method para sa Time Zone Conversion (Ginagamit ang PH Time Zone)
+        private TimeZoneInfo GetPhilippineTimeZone()
+        {
+            try
+            {
+                // Standard ID for Windows and Linux/macOS
+                return TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                try
+                {
+                    return TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+                }
+                catch
+                {
+                    return TimeZoneInfo.Utc;
+                }
+            }
         }
 
         public async System.Threading.Tasks.Task OnGetAsync()
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                // 1. KUNIN ANG DISPLAY NAME (Galing sa ClaimTypes.Name)
-                // Ito ay ang Employee.Name na ni-set natin sa Login.cshtml.cs
+                // 1. KUNIN ANG DISPLAY NAME
                 EmployeeUsername = User.Identity.Name ?? "Employee";
 
-                // 2. KUNIN ANG EMPLOYEE ID (Galing sa custom "EmployeeId" claim)
-                // CRITICAL: Ito ang gagamitin para sa filtering.
+                // 2. KUNIN ANG EMPLOYEE ID
                 string? employeeId = User.Claims
                     .FirstOrDefault(c => c.Type == "EmployeeId")?.Value;
 
                 if (string.IsNullOrEmpty(employeeId))
                 {
-                    // Kung walang ID claim (e.g., luma ang cookie), mag-exit.
                     return;
                 }
 
-                // 3. Kunin ang tasks gamit ang tamang ID (FINALLY! Filtered na ito!)
+                // 3. Kunin ang tasks
                 var allTasks = await _taskService.GetTasksByEmployeeIdAsync(employeeId);
+                var pendingTasks = allTasks.Where(t => t.Status != "Completed" && t.Status != "Archived").ToList();
 
-                // 4. Count the tasks
+                // 4. Time Zone at Overdue Check Setup
+                TimeZoneInfo phTimeZone = GetPhilippineTimeZone();
+                DateTime phNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, phTimeZone);
+                int overdueCounter = 0;
+
+                // 5. Loop para i-check ang Overdue tasks
+                foreach (var task in pendingTasks)
+                {
+                    if (task.DueDate.HasValue)
+                    {
+                        DateTime utcTime = task.DueDate.Value;
+
+                        // Siguraduhin na UTC ang Kind para tama ang conversion
+                        if (task.DueDate.Value.Kind != DateTimeKind.Utc)
+                        {
+                            utcTime = DateTime.SpecifyKind(task.DueDate.Value, DateTimeKind.Utc);
+                        }
+
+                        // I-convert ang DueDate sa Philippine Time
+                        DateTime phDueDate = TimeZoneInfo.ConvertTimeFromUtc(utcTime, phTimeZone);
+
+                        // I-check kung overdue na ito
+                        if (phDueDate < phNow)
+                        {
+                            overdueCounter++;
+                        }
+                    }
+                }
+
+                // 6. I-set ang Counts
                 TotalTasksCount = allTasks.Count;
                 CompletedTasksCount = allTasks.Count(t => t.Status == "Completed");
                 PendingTasksCount = allTasks.Count(t => t.Status == "Pending" || t.Status == "In Progress");
                 HighPriorityTasksCount = allTasks.Count(t => t.Priority == "High" && t.Status != "Completed");
 
-                // 5. Calculate Completion Percentage
+                // ❗ I-set ang Overdue Count ❗
+                OverdueTasksCount = overdueCounter;
+
+                // 7. Calculate Completion Percentage
                 if (TotalTasksCount > 0)
                 {
-                    CompletionPercentage = (double)CompletedTasksCount / TotalTasksCount * 100;
+                    CompletionPercentage = Math.Round((double)CompletedTasksCount / TotalTasksCount * 100, 2);
                 }
 
-                // 6. Kunin ang Recent Completed Tasks
+                // 8. Kunin ang Recent Completed Tasks
                 RecentCompletedTasks = allTasks
                     .Where(t => t.Status == "Completed" && t.CompletionDate.HasValue)
                     .OrderByDescending(t => t.CompletionDate)

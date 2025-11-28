@@ -1,6 +1,4 @@
-﻿// TaskOrganizer.Pages.Login/Login.cshtml.cs
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
@@ -9,6 +7,7 @@ using TaskOrganizer.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using TaskOrganizer.Models; // ✅ IDINAGDAG: Para ma-access ang Admin/Employee models
 
 namespace TaskOrganizer.Pages.Login
 {
@@ -35,28 +34,27 @@ namespace TaskOrganizer.Pages.Login
 
             var hashed = HashPassword(Input.Password);
 
-            // Note: Ang 'valid' variable ay hindi na kailangan para sa Employee.
-
             if (Input.Role == "Admin")
             {
-                bool validAdmin = await _adminService.ValidateLogin(Input.Email, hashed);
+                // ✅ PAGBABAGO: Kumuha ng Admin object pagkatapos ng validation
+                // Assuming may GetValidAdmin method sa AdminService na nagbabalik ng Admin object (tulad ng Employee)
+                var admin = await _adminService.GetValidAdmin(Input.Email, hashed);
 
-                if (validAdmin)
+                if (admin != null)
                 {
-                    // Assuming you have an Authenticate method for Admin
-                    // You might need to adjust this part based on your Admin setup
+                    // ✅ PAGBABAGO: Gumamit ng Authenticate method
+                    // Assumed na ang Admin model ay mayroong Id, Name, at Email properties.
+                    await Authenticate(admin.Id!, admin.Name, admin.Email, Input.Role);
                     return RedirectToPage("/AdminDashboard");
                 }
             }
             else // Employee Login Check
             {
-                // ❗ CRITICAL FIX #1: GUMAMIT NG GetValidEmployee (na nagbabalik ng Employee object) ❗
                 var employee = await _employeeService.GetValidEmployee(Input.Email, hashed);
 
                 if (employee != null)
                 {
-                    // ❗ CRITICAL FIX #2: PUMASA NG EMPLOYEE DATA sa Authenticate method ❗
-                    // employee.Id (para sa filtering) at employee.Name (para sa display)
+                    // Gumagamit na ng Authenticate
                     await Authenticate(employee.Id!, employee.Name, employee.Email, Input.Role);
                     return RedirectToPage("/Dashboard");
                 }
@@ -67,20 +65,15 @@ namespace TaskOrganizer.Pages.Login
             return Page();
         }
 
-        private async System.Threading.Tasks.Task Authenticate(string employeeId, string displayName, string email, string role)
+        // WALANG PAGBABAGO DITO - NAKA-SET SA "EmployeeId" CLAIM
+        private async System.Threading.Tasks.Task Authenticate(string userId, string displayName, string email, string role)
         {
             var claims = new List<Claim>
             {
-                // CRITICAL: Id para sa filtering (gagamitin sa TaskService)
-                new Claim("EmployeeId", employeeId), 
-                
-                // CRITICAL: Name para sa display sa Dashboard (Ito ang magiging User.Identity.Name)
-                new Claim(ClaimTypes.Name, displayName), 
-                
-                // Email (Optional, pero maganda kung meron)
-                new Claim(ClaimTypes.Email, email), 
-                
-                // Role
+                // Ginamit ang "EmployeeId" claim para sa ID, na consistent sa MyTasks.cshtml.cs
+                new Claim("EmployeeId", userId),
+                new Claim(ClaimTypes.Name, displayName),
+                new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Role, role)
             };
 

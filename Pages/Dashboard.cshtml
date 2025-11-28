@@ -20,19 +20,50 @@
     }
 
     /* ❗ THEME COLORS (TULAD NG SA MYTASKS.CSHTML) ❗ */
-    .color-primary { background-color: #8B453A; } /* Dark Brown */
-    .color-secondary { background-color: #D0B8A8; } /* Light Brown/Tan */
-    .color-accent { background-color: #DFD3C3; }
-    .color-light { background-color: #F8EDE3; }
-    .text-primary { color: #8B453A; }
-    .text-secondary { color: #D0B8A8; }
-    .text-dark { color: #222222; }
-    
-    .sidebar-bg { background-color: #8B453A; }
-    .main-bg { background-color: #F8EDE3; }
-    .card-bg { background-color: white; }
+    .color-primary {
+        background-color: #8B453A;
+    }
+    /* Dark Brown */
+    .color-secondary {
+        background-color: #D0B8A8;
+    }
+    /* Light Brown/Tan */
+    .color-accent {
+        background-color: #DFD3C3;
+    }
 
-    .link-text { font-size: 1.05rem; font-weight: 500; }
+    .color-light {
+        background-color: #F8EDE3;
+    }
+
+    .text-primary {
+        color: #8B453A;
+    }
+
+    .text-secondary {
+        color: #D0B8A8;
+    }
+
+    .text-dark {
+        color: #222222;
+    }
+
+    .sidebar-bg {
+        background-color: #8B453A;
+    }
+
+    .main-bg {
+        background-color: #F8EDE3;
+    }
+
+    .card-bg {
+        background-color: white;
+    }
+
+    .link-text {
+        font-size: 1.05rem;
+        font-weight: 500;
+    }
 
     .active-link {
         background-color: #D0B8A8;
@@ -54,17 +85,32 @@
         border: 1px solid #D0B8A8;
     }
 
-    .user-btn:hover {
-        background-color: #8B453A;
-        color: white;
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        .user-btn:hover {
+            background-color: #8B453A;
+            color: white;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
     }
 
-    .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #8B453A; border-radius: 20px; }
-    .border-primary-accent { border-color: #8B453A; }
-    .text-primary-accent { color: #8B453A; }
-    .modal-backdrop { background-color: rgba(0, 0, 0, 0.6); }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #8B453A;
+        border-radius: 20px;
+    }
+
+    .border-primary-accent {
+        border-color: #8B453A;
+    }
+
+    .text-primary-accent {
+        color: #8B453A;
+    }
+
+    .modal-backdrop {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
 
     /* --- CSS for Circular Progress Bar (Donut Chart) --- */
     .progress-ring {
@@ -74,10 +120,10 @@
         height: 150px;
     }
 
-    .progress-ring svg {
-        transform: rotate(-90deg); /* Start at the top */
-        overflow: visible; /* Tiyakin na makikita ang circle */
-    }
+        .progress-ring svg {
+            transform: rotate(-90deg); /* Start at the top */
+            overflow: visible; /* Tiyakin na makikita ang circle */
+        }
 
     .progress-ring-circle {
         transition: stroke-dashoffset 0.5s ease-in-out;
@@ -121,7 +167,7 @@
             </a>
         </div>
     </div>
-    
+
     <div class="flex-1 main-bg p-8 overflow-y-auto custom-scrollbar">
 
         <div class="flex justify-between items-center mb-8 flex-shrink-0 card-bg p-6 rounded-xl shadow-lg border-t-4 border-secondary">
@@ -163,13 +209,15 @@
                 <div class="text-3xl text-yellow-500 opacity-70"><i class="fas fa-hourglass-half"></i></div>
             </div>
 
-            <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-500">
+            <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-600">
                 <div>
-                    <p class="text-gray-500 text-lg">High Priority</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.HighPriorityTasksCount</h2>
-                    <p class="text-base text-gray-400">Urgent tasks</p>
+                    <p class="text-gray-500 text-lg">Missing/Overdue</p>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.OverdueTasksCount</h2>
+                    <p class="text-base text-gray-400">Past due tasks</p>
                 </div>
-                <div class="text-3xl text-red-500 opacity-70"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="text-3xl text-red-600 opacity-70">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
             </div>
 
         </div>
@@ -186,27 +234,27 @@
                         <div class="progress-ring" id="employeeTaskProgressRing">
                             <svg width="150" height="150" viewBox="0 0 150 150">
                                 <circle class="text-gray-300"
-                                    stroke="currentColor"
-                                    stroke-width="10"
-                                    fill="transparent"
-                                    r="65"
-                                    cx="75"
-                                    cy="75" />
+                                        stroke="currentColor"
+                                        stroke-width="10"
+                                        fill="transparent"
+                                        r="65"
+                                        cx="75"
+                                        cy="75" />
                                 <circle class="progress-ring-circle text-primary"
-                                    stroke="currentColor"
-                                    stroke-width="10"
-                                    fill="transparent"
-                                    r="65"
-                                    cx="75"
-                                    cy="75"
-                                    style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
+                                        stroke="currentColor"
+                                        stroke-width="10"
+                                        fill="transparent"
+                                        r="65"
+                                        cx="75"
+                                        cy="75"
+                                        style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
                             </svg>
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <span class="text-4xl font-bold text-primary" id="employeeCompletionPercentage">0%</span>
                             </div>
                         </div>
                         <p class="text-xl font-semibold text-gray-600 mt-6">
-                            Tasks Completed: 
+                            Tasks Completed:
                             <span id="employeeCompletedTasksCount">@Model.CompletedTasksCount</span>/
                             <span id="employeeTotalTasksCount">@Model.TotalTasksCount</span>
                         </p>
@@ -232,7 +280,7 @@
                                 <div class="text-right">
                                     <span class="text-sm font-medium px-3 py-1 bg-green-100 text-green-700 rounded-full">COMPLETED</span>
                                     <p class="text-xs text-gray-500 mt-1">
-                                        Finished: @(task.CompletionDate.HasValue ? task.CompletionDate.Value.ToString("MMM dd, hh:mm tt") : "N/A")
+                                        Finished: @(task.CompletionDate.HasValue? task.CompletionDate.Value.ToString("MMM dd, hh:mm tt") : "N/A")
                                     </p>
                                 </div>
                             </div>
@@ -296,7 +344,7 @@
         modal.classList.add('hidden');
     }
 
-    // --- NEW: JavaScript for Circular Progress Bar Logic (Employee) ---
+    // --- JavaScript for Circular Progress Bar Logic (Employee) ---
 
     // Function to set the progress bar based on percentage
     function setEmployeeProgress(percent) {
@@ -326,5 +374,5 @@
 
     // Set the progress bar
     setEmployeeProgress(completionRate);
-    
+
 </script>

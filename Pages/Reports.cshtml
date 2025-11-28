@@ -21,12 +21,15 @@
     .color-primary {
         background-color: #8B453A;
     }
+
     .color-secondary {
         background-color: #D0B8A8;
     }
+
     .color-accent {
         background-color: #DFD3C3;
     }
+
     .color-light {
         background-color: #F8EDE3;
     }
@@ -34,6 +37,7 @@
     .text-primary {
         color: #8B453A;
     }
+
     .text-secondary {
         color: #D0B8A8;
     }
@@ -45,9 +49,11 @@
     .sidebar-bg {
         background-color: #8B453A;
     }
+
     .main-bg {
         background-color: #F8EDE3;
     }
+
     .card-bg {
         background-color: white;
     }
@@ -58,7 +64,7 @@
     }
 
     .active-link {
-        background-color: #D0B8A8; 
+        background-color: #D0B8A8;
         color: #3A0519;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         font-weight: 700;
@@ -71,8 +77,8 @@
     }
 
     .user-btn {
-        background-color: #D0B8A8; 
-        color: #8B453A; 
+        background-color: #D0B8A8;
+        color: #8B453A;
         font-weight: bold;
         border: 1px solid #DFD3C3;
     }
@@ -88,7 +94,7 @@
     }
 
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #8B453A; 
+        background-color: #8B453A;
         border-radius: 20px;
     }
 
@@ -152,7 +158,7 @@
                 <p class="text-lg text-gray-500">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
             </div>
             <button class="user-btn text-lg px-5 py-2 rounded-lg font-semibold shadow-md transition duration-150 flex items-center gap-2">
-                <i class="fas fa-user"></i> User
+                <i class="fas fa-user"></i> @Model.EmployeeUsername
             </button>
         </div>
 
@@ -161,7 +167,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-primary-accent">
                 <div>
                     <p class="text-gray-500 text-lg">Total Tasks</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.TotalTasksCount</h2>
                     <p class="text-base text-gray-400">All your tasks</p>
                 </div>
                 <div class="text-3xl text-primary-accent opacity-70">
@@ -172,7 +178,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-green-500">
                 <div>
                     <p class="text-gray-500 text-lg">Completed</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.CompletedTasksCount</h2>
                     <p class="text-base text-gray-400">Finished tasks</p>
                 </div>
                 <div class="text-3xl text-green-500 opacity-70">
@@ -183,7 +189,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-yellow-500">
                 <div>
                     <p class="text-gray-500 text-lg">Pending</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.PendingTasksCount</h2>
                     <p class="text-base text-gray-400">In progress</p>
                 </div>
                 <div class="text-3xl text-yellow-500 opacity-70">
@@ -194,7 +200,7 @@
             <div class="card-bg p-6 rounded-xl shadow-lg flex items-center justify-between border-l-4 border-red-500">
                 <div>
                     <p class="text-gray-500 text-lg">High Priority</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.HighPriorityTasksCount</h2>
                     <p class="text-base text-gray-400">Urgent tasks</p>
                 </div>
                 <div class="text-3xl text-red-500 opacity-70">
@@ -203,7 +209,6 @@
             </div>
 
         </div>
-
         <div class="grid grid-cols-2 gap-6 mt-8 flex-grow">
 
             <div class="card-bg p-8 rounded-xl shadow-lg h-full flex flex-col">
@@ -214,19 +219,19 @@
                 <div class="space-y-6 py-6 flex flex-col justify-around flex-grow">
                     <div class="flex justify-between items-center text-lg">
                         <span>Total Tasks Created</span>
-                        <span class="font-bold text-lg text-primary-accent">0</span>
+                        <span class="font-bold text-lg text-primary-accent">@Model.TotalTasksCount</span>
                     </div>
                     <div class="flex justify-between items-center text-lg">
                         <span>Tasks Completed</span>
-                        <span class="font-bold text-lg text-green-600">0</span>
+                        <span class="font-bold text-lg text-green-600">@Model.CompletedTasksCount</span>
                     </div>
                     <div class="flex justify-between items-center text-lg">
                         <span>Completion Rate</span>
-                        <span class="font-bold text-lg text-green-600">0%</span>
+                        <span class="font-bold text-lg text-green-600">@Model.CompletionPercentage.ToString("F2")%</span>
                     </div>
                     <div class="flex justify-between items-center text-lg">
-                        <span>High Priority Tasks</span>
-                        <span class="font-bold text-lg text-red-600">0</span>
+                        <span>High Priority Tasks (Pending/In Progress)</span>
+                        <span class="font-bold text-lg text-red-600">@Model.HighPriorityTasksCount</span>
                     </div>
                 </div>
             </div>
@@ -238,20 +243,28 @@
 
                 <div class="space-y-6 py-6 flex flex-col justify-around flex-grow">
                     <div class="flex justify-between items-center text-lg">
-                        <span class="flex items-center gap-2 text-red-600 font-medium">🔴 High Priority</span>
-                        <span class="font-bold text-lg text-red-600">0 tasks</span>
+                        <span class="flex items-center gap-2 text-red-600 font-medium">🔴 High Priority (Remaining)</span>
+                        <span class="font-bold text-lg text-red-600">@Model.HighPriorityTasksCount tasks</span>
                     </div>
                     <div class="flex justify-between items-center text-lg">
-                        <span class="flex items-center gap-2 text-yellow-600 font-medium">🟠 Medium Priority</span>
-                        <span class="font-bold text-lg text-yellow-600">0 tasks</span>
+                        <span class="flex items-center gap-2 text-yellow-600 font-medium">🟠 Medium & Low Priority (Remaining)</span>
+                        @{
+                            // Tantiya na lang ito kung wala pang separate counts sa C# model
+                            int remainingTasks = Model.PendingTasksCount - Model.HighPriorityTasksCount;
+                            // Siguraduhin na hindi negative
+                            int otherPriorityTasks = remainingTasks > 0 ? remainingTasks : 0;
+                        }
+                        <span class="font-bold text-lg text-yellow-600">@otherPriorityTasks tasks</span>
                     </div>
+
                     <div class="flex justify-between items-center text-lg">
-                        <span class="flex items-center gap-2 text-green-600 font-medium">🟢 Low Priority</span>
-                        <span class="font-bold text-lg text-green-600">0 tasks</span>
+                        <span class="flex items-center gap-2 text-green-600 font-medium">🟢 Completed Tasks</span>
+                        <span class="font-bold text-lg text-green-600">@Model.CompletedTasksCount tasks</span>
                     </div>
+
                     <div class="text-center py-6 text-gray-500">
-                        <i class="fas fa-binoculars text-gray-300 text-4xl mb-3"></i>
-                        <p class="text-base">Data will appear here once tasks are logged.</p>
+                        <i class="fas fa-chart-pie text-gray-300 text-4xl mb-3"></i>
+                        <p class="text-base">For a detailed breakdown (Low/Medium/High), please check your Task list.</p>
                     </div>
                 </div>
             </div>

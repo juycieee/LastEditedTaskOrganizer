@@ -1,30 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Claims; // Kailangan para sa claims
-using TaskOrganizer.Services; // Kailangan para sa TaskService
-using TaskOrganizer.Models; // Kailangan para sa Task Model
+using System.Security.Claims;
+using TaskOrganizer.Services;
+using TaskOrganizer.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization; // Para i-secure ang page
-using System; // Kailangan para sa DateTime.Today
+using Microsoft.AspNetCore.Authorization;
+using System;
 using AppTask = TaskOrganizer.Models.Task;
 
 namespace TaskOrganizer.Pages
 {
     [Authorize(Roles = "Employee")]
-
     public class CalendarModel : PageModel
     {
         private readonly TaskService _taskService;
 
-        // ❗ IDINAGDAG: Properties para sa data at counts ❗
         public string EmployeeUsername { get; set; } = "User";
         public IList<AppTask> AllMyTasks { get; set; } = new List<AppTask>();
-
-        // ❗ BAGONG PROPERTY: Para sa listahan ng tasks na due TODAY ❗
         public IList<AppTask> TodaysTasks { get; set; } = new List<AppTask>();
 
-        // Properties para sa Summary Counts (Gaya ng sa Dashboard at MyTasks)
         public int TotalTasksCount => AllMyTasks.Count;
         public int CompletedTasksCount => AllMyTasks.Count(t => t.Status == "Completed");
         public int PendingTasksCount => AllMyTasks.Count(t => t.Status == "Pending" || t.Status == "In Progress");
@@ -35,42 +30,113 @@ namespace TaskOrganizer.Pages
             _taskService = taskService;
         }
 
+        // Helper Method para sa Time Zone Conversion
+        private TimeZoneInfo GetPhilippineTimeZone()
+        {
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                try
+                {
+                    return TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila");
+                }
+                catch
+                {
+                    return TimeZoneInfo.Utc;
+                }
+            }
+        }
+
+        private void ConvertTasksToPhTime(IList<AppTask> tasks, TimeZoneInfo phTimeZone)
+        {
+            foreach (var task in tasks)
+            {
+                if (task.DueDate.HasValue)
+                {
+                    DateTime utcTime = task.DueDate.Value;
+                    if (task.DueDate.Value.Kind != DateTimeKind.Utc)
+                    {
+                        utcTime = DateTime.SpecifyKind(task.DueDate.Value, DateTimeKind.Utc);
+                    }
+                    task.DueDate = TimeZoneInfo.ConvertTimeFromUtc(utcTime, phTimeZone);
+                }
+            }
+        }
+
         public async System.Threading.Tasks.Task OnGetAsync()
         {
-            if (User.Identity == null || !User.Identity.IsAuthenticated)
-            {
-                // Kung walang user, huwag mag-proceed
-                return;
-            }
+            if (User.Identity == null || !User.Identity.IsAuthenticated) return;
 
-            // 1. KUNIN ANG USERNAME
             EmployeeUsername = User.Identity.Name ?? "Employee";
-
-            // 2. KUNIN ANG EMPLOYEE ID (Galing sa custom claim na "EmployeeId")
             string? currentEmployeeId = User.FindFirstValue("EmployeeId");
 
-            if (string.IsNullOrEmpty(currentEmployeeId))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(currentEmployeeId)) return;
 
-            // 3. Kukunin ang LAHAT ng Tasks para sa current user (gamit ang ID)
-            // TANDAAN: Ang DueDate property ay naglalaman na ng Petsa AT Oras
             AllMyTasks = await _taskService.GetTasksByEmployeeIdAsync(currentEmployeeId);
 
-            // ❗ 4. UPDATE: FILTER AT SORT ANG TASKS NA DUE NGAYON (KASAMA ANG ORAS) ❗
+            var phTimeZone = GetPhilippineTimeZone();
+            ConvertTasksToPhTime(AllMyTasks, phTimeZone); // I-convert ang lahat ng tasks
+
+            var phTodayDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, phTimeZone).Date;
+
+            // Kukunin ang tasks para sa ARAW na ITO, hindi completed, naka-sort sa DueTime
             TodaysTasks = AllMyTasks
                 .Where(t =>
                     t.DueDate.HasValue &&
-                    t.DueDate.Value.Date == DateTime.Today.Date && // Tinitingnan kung today ang date
-                    t.Status != "Completed" // Hindi na isasama ang tapos na
+                    t.DueDate.Value.Date == phTodayDate &&
+                    t.Status != "Completed"
                 )
-                // ❗ BAGONG LOGIC: I-sort ang TodaysTasks ayon sa Due Time (ascendinG) ❗
                 .OrderBy(t => t.DueDate)
                 .ToList();
+        }
 
-            // Ang counts (TotalTasksCount, etc.) ay awtomatikong magka-calculate
-            // dahil sa pag-set ng AllMyTasks.
+        // ==============================================================================
+        // ❗ BAGONG HANDLER METHOD PARA SA PAG-CLICK NG PETSA ❗
+        // ==============================================================================
+        public async System.Threading.Tasks.Task<JsonResult> OnGetTasksByDateAsync(DateTime date)
+        {
+            // Security Check
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return new JsonResult(new { success = false, message = "Not authenticated" });
+            }
+
+            string? currentEmployeeId = User.FindFirstValue("EmployeeId");
+            if (string.IsNullOrEmpty(currentEmployeeId))
+            {
+                return new JsonResult(new { success = false, message = "Employee ID not found" });
+            }
+
+            // Kukunin ang lahat ng tasks ng user
+            var allTasks = await _taskService.GetTasksByEmployeeIdAsync(currentEmployeeId);
+
+            // I-convert ang mga petsa sa PH Time
+            var phTimeZone = GetPhilippineTimeZone();
+            ConvertTasksToPhTime(allTasks, phTimeZone);
+
+            // I-filter ang tasks para sa specific na petsa, at hindi pa completed
+            var filteredTasks = allTasks
+                .Where(t =>
+                    t.DueDate.HasValue &&
+                    t.DueDate.Value.Date == date.Date && // Compare lang ang date part
+                    t.Status != "Completed"
+                )
+                .OrderBy(t => t.DueDate) // I-sort sa oras
+                .Select(t => new
+                {
+                    t.Title,
+                    t.Description,
+                    t.Priority,
+                    // Format ang oras para madaling gamitin sa JavaScript
+                    DueDate = t.DueDate.HasValue ? t.DueDate.Value.ToString("hh:mm tt") : "Any Time"
+                })
+                .ToList();
+
+            // Ibabalik ang tasks bilang JSON
+            return new JsonResult(filteredTasks);
         }
     }
 }
