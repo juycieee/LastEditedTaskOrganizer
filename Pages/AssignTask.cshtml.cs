@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using TaskOrganizer.Models;
 using TaskOrganizer.Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http; // ❗ NEW: Para sa IFormFile
+using Microsoft.AspNetCore.Hosting; // ❗ NEW: Para sa IWebHostEnvironment
+using System.IO; // ❗ NEW: Para sa Path at FileStream
 
 namespace TaskOrganizer.Pages
 {
@@ -12,14 +15,13 @@ namespace TaskOrganizer.Pages
     {
         private readonly TaskService _taskService;
         private readonly EmployeeServices _employeeService;
+        private readonly IWebHostEnvironment _webHostEnvironment; // ❗ NEW: Para sa pag-save ng file
 
-        // I-re-declare ang using directive para ma-resolve ang conflict sa Task Model 
-        // using TaskModel = TaskOrganizer.Models.Task;
-
-        public AssignTaskModel(TaskService taskService, EmployeeServices employeeService)
+        public AssignTaskModel(TaskService taskService, EmployeeServices employeeService, IWebHostEnvironment webHostEnvironment)
         {
             _taskService = taskService;
             _employeeService = employeeService;
+            _webHostEnvironment = webHostEnvironment; // ❗ NEW: Inject the environment
         }
 
         [BindProperty]
@@ -51,6 +53,10 @@ namespace TaskOrganizer.Pages
             [BindProperty(Name = "due_time")]
             [DataType(DataType.Time)]
             public string? DueTime { get; set; }
+
+            // ❗ NEW: Property para saluhin ang in-upload na file ❗
+            [BindProperty(Name = "AttachmentFile")]
+            public IFormFile? AttachmentFile { get; set; }
         }
 
         public async System.Threading.Tasks.Task OnGetAsync()
@@ -66,6 +72,38 @@ namespace TaskOrganizer.Pages
             {
                 return Page();
             }
+
+            string attachmentPath = null; // Variable para i-save ang path/URL ng file
+
+            // ❗ NEW: File Handling Logic ❗
+            if (Input.AttachmentFile != null)
+            {
+                // 1. I-set up ang uploads folder path (e.g., wwwroot/attachments)
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "attachments");
+
+                // 2. Gumawa ng folder kung wala pa
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                // 3. Gumawa ng unique filename
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Input.AttachmentFile.FileName;
+
+                // 4. Ito ang path na ise-save sa database (relative path)
+                attachmentPath = "/attachments/" + uniqueFileName;
+
+                // 5. Kumpletong path sa server
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // 6. I-save ang file sa server
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.AttachmentFile.CopyToAsync(fileStream);
+                }
+            }
+            // ❗ END File Handling Logic ❗
+
 
             DateTime? fullDueDate = Input.DueDate;
 
@@ -87,7 +125,10 @@ namespace TaskOrganizer.Pages
                 Description = Input.Description,
                 EmployeeId = Input.EmployeeId,
                 Priority = Input.Priority,
-                DueDate = fullDueDate // Ginagamit na ang pinagsamang DateTime
+                DueDate = fullDueDate, // Ginagamit na ang pinagsamang DateTime
+                // ❗ NEW: Idagdag ang AttachmentPath sa inyong Task Model ❗
+                // Tandaan: Dapat may property na `AttachmentUrl` or katulad nito sa inyong TaskOrganizer.Models.Task
+                AttachmentUrl = attachmentPath
             };
 
             await _taskService.AssignNewTaskAsync(newTask);

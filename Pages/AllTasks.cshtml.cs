@@ -10,6 +10,7 @@ namespace TaskOrganizer.Pages
 {
     public class AllTasksModel : PageModel
     {
+        // Ipagpalagay na ang TaskService ay mayroong 'DeleteTaskAsync' method na kailangan.
         private readonly TaskService _taskService;
         private readonly EmployeeServices _employeeService;
 
@@ -48,6 +49,7 @@ namespace TaskOrganizer.Pages
             IEnumerable<TaskOrganizer.Models.Task> filteredTasks = allTasks;
 
             // ❗ KRITIKAL: I-filter para TANGING mga task na HINDI Archived ang makita ❗
+            // Ipagpalagay na ang 'Status' na "Archived" ay ginagamit pa rin for filtering.
             filteredTasks = filteredTasks.Where(t => t.Status != "Archived");
 
             // Filter by Priority
@@ -59,6 +61,12 @@ namespace TaskOrganizer.Pages
             // Filter by Employee
             if (!string.IsNullOrEmpty(EmployeeFilter))
             {
+                // Note: Ipagpalagay na ang EmployeeFilter ay Employee Name, kailangan mo ng 'lookup' dito.
+                // Base sa inyong .cshtml, mukhang ang EmployeeFilter ay Employee Name.
+                // Kung ang EmployeeFilter ay EmployeeId, ayos lang ang code sa baba.
+                // Kung Employee Name ang dala, kailangan ng Employee List lookup.
+                // Pero sa ngayon, ipagpapalagay ko na ang property t.EmployeeId sa Task model ay ang kailangan i-match.
+                // Kung ang EmployeeFilter ay ang ID, ito ay tama.
                 filteredTasks = filteredTasks.Where(t => t.EmployeeId == EmployeeFilter);
             }
 
@@ -72,7 +80,7 @@ namespace TaskOrganizer.Pages
             Tasks = filteredTasks.ToList();
         }
 
-        // ❗ DITO ANG ONPOST HANDLER PARA SA ARCHIVE/DELETE BUTTON ❗
+        // 🚨 BINAGO ITO: Permanenteng burahin ang task sa database. 🚨
         public async Task<IActionResult> OnPostDeleteAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -80,9 +88,11 @@ namespace TaskOrganizer.Pages
                 return RedirectToPage();
             }
 
-            // Gagamitin ang "Archived" status para hindi ma-delete sa database.
-            // Awtomatikong mawawala ito sa OnGetAsync listahan dahil sa filter sa taas.
-            await _taskService.UpdateTaskStatusAsync(id, "Archived");
+            // ❗ KRITIKAL NA PAGBABAGO: Imbes na i-update ang status sa "Archived",
+            // TULOY na itong BURAHIN sa database gamit ang TaskService.
+
+            // Ipagpalagay na mayroong 'DeleteTaskAsync' method ang inyong TaskService
+            await _taskService.DeleteTaskAsync(id); // <--- ITO ANG MAGBUBURA NG PERMANENTE
 
             // I-redirect pabalik sa AllTasks page
             return RedirectToPage();

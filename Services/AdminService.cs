@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using TaskOrganizer.Models;
+using System.Collections.Generic; // ❗ ADDED ❗
 
 namespace TaskOrganizer.Services
 {
@@ -11,6 +12,12 @@ namespace TaskOrganizer.Services
         {
             // Pagkuha ng 'Admins' collection mula sa MongoDB
             _admins = database.GetCollection<Admin>("Admins");
+        }
+
+        // ❗ ADDED: Method para kunin ang LAHAT ng Admins ❗
+        public async System.Threading.Tasks.Task<List<Admin>> GetAllAdminsAsync()
+        {
+            return await _admins.Find(_ => true).ToListAsync();
         }
 
         // ✅ IDINAGDAG: Method para kunin ang Admin object (Ito ang nagreresolve sa 'GetValidAdmin' error)

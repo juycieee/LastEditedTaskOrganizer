@@ -92,7 +92,7 @@ namespace TaskOrganizer.Pages
                     .Where(t => t.Status != "Completed" && t.Status != "Archived")
                     .Select(t =>
                     {
-                        // 1. SOLVED: Gumawa ng Bagong AppTask Object (Safe Cloning)
+                        // 1. Safe Cloning ng Task Object, KASAMA ang Bagong AttachmentUrl
                         var displayTask = new AppTask
                         {
                             Id = t.Id,
@@ -102,7 +102,9 @@ namespace TaskOrganizer.Pages
                             Status = t.Status,
                             EmployeeId = t.EmployeeId,
                             AssignerId = t.AssignerId,
-                            DueDate = t.DueDate
+                            DueDate = t.DueDate,
+                            // ❗ ADDED: Kopyahin ang AttachmentUrl mula sa database task ❗
+                            AttachmentUrl = t.AttachmentUrl
                         };
 
                         // 2. DUE DATE CONVERSION AND OVERDUE CHECK

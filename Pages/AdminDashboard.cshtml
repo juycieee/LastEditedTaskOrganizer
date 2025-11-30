@@ -20,163 +20,186 @@
 
 <style>
 
-    body, html {
-        margin: 0 !important;
-        padding: 0 !important;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
+        body, html {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+
     }
 
 
 
-    .color-primary {
-        background-color: #850E35;
+        .color-primary {
+                background-color: #850E35;
+
     }
 
 
 
-    .color-secondary {
-        background-color: #EE6983;
+        .color-secondary {
+                background-color: #EE6983;
+
     }
 
 
 
-    .color-accent {
-        background-color: #FFC4C4;
+        .color-accent {
+                background-color: #FFC4C4;
+
     }
 
 
 
-    .color-light {
-        background-color: #FCF5EE;
+        .color-light {
+                background-color: #FCF5EE;
+
     }
 
 
 
-    .text-primary {
-        color: #850E35;
+        .text-primary {
+                color: #850E35;
+
     }
 
 
 
-    .text-secondary {
-        color: #EE6983;
+        .text-secondary {
+                color: #EE6983;
+
     }
 
 
 
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
+        .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+
     }
 
 
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #850E35;
-        border-radius: 20px;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #850E35;
+                border-radius: 20px;
+
     }
+
 
 
 
     /* GENERAL STYLING */
+        .sidebar-bg {
+                background-color: #850E35;
 
-    .sidebar-bg {
-        background-color: #850E35;
     }
 
 
 
-    .main-bg {
-        background-color: #FCF5EE;
+        .main-bg {
+                background-color: #FCF5EE;
+
     }
 
 
 
-    .card-bg {
-        background-color: white;
+        .card-bg {
+                background-color: white;
+
     }
 
 
 
-    .sidebar-link-text {
-        font-size: 1.05rem;
-        font-weight: 500;
+        .sidebar-link-text {
+                font-size: 1.05rem;
+                font-weight: 500;
+
     }
 
 
 
-    .active-link {
-        background-color: #EE6983;
-        color: white;
-        border-left: 4px solid #FFC4C4;
-        padding-left: 20px;
+        .active-link {
+                background-color: #EE6983;
+                color: white;
+                border-left: 4px solid #FFC4C4;
+                padding-left: 20px;
+
     }
 
 
 
-    .hover-link:hover {
-        background-color: #EE6983;
-        opacity: 0.9;
+        .hover-link:hover {
+                background-color: #EE6983;
+                opacity: 0.9;
+
     }
 
 
 
-    .admin-btn {
-        background-color: #FFC4C4;
-        color: #850E35;
-        font-weight: bold;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: 1px solid #EE6983;
+        .admin-btn {
+                background-color: #FFC4C4;
+                color: #850E35;
+                font-weight: bold;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                border: 1px solid #EE6983;
+
     }
 
 
 
-        .admin-btn:hover {
-            background-color: #EE6983;
-            color: white;
-        }
+            .admin-btn:hover {
+                    background-color: #EE6983;
+                    color: white;
 
-
-
-    .border-primary {
-        border-color: #850E35;
     }
 
 
 
-    .text-primary-icon {
-        color: #850E35;
+        .border-primary {
+                border-color: #850E35;
+
     }
 
 
 
-    .modal-backdrop {
-        background-color: rgba(0, 0, 0, 0.6);
+        .text-primary-icon {
+                color: #850E35;
+
     }
+
+
+
+        .modal-backdrop {
+                background-color: rgba(0, 0, 0, 0.6);
+
+    }
+
 
 
 
     /* --- NEW: CSS for Circular Progress Bar (Donut Chart) --- */
+        .progress-ring {
+                position: relative;
+                display: inline-block;
+                width: 150px; /* Chart size */
 
-    .progress-ring {
-        position: relative;
-        display: inline-block;
-        width: 150px; /* Chart size */
+                height: 150px;
 
-        height: 150px;
     }
 
 
 
-        .progress-ring svg {
-            transform: rotate(-90deg); /* Start at the top */
+                .progress-ring svg {
+                        transform: rotate(-90deg); /* Start at the top */
+
         }
 
 
 
-    .progress-ring-circle {
-        transition: stroke-dashoffset 0.5s ease-in-out;
+        .progress-ring-circle {
+                transition: stroke-dashoffset 0.5s ease-in-out;
+
     }
 
 </style>
@@ -293,7 +316,7 @@
 
                 <div>
 
-                    <p class="text-gray-500 text-lg">Total Employees</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <p class="text-gray-500 text-lg">Total Employees</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.TotalEmployees</h2> @* ❗ UPDATED ❗ *@
 
                     <p class="text-base text-gray-400">Registered users</p>
 
@@ -313,7 +336,7 @@
 
                 <div>
 
-                    <p class="text-gray-500 text-lg">Total Tasks</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <p class="text-gray-500 text-lg">Total Tasks</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.TotalTasks</h2> @* ❗ UPDATED ❗ *@
 
                     <p class="text-base text-gray-400">All assigned tasks</p>
 
@@ -333,7 +356,7 @@
 
                 <div>
 
-                    <p class="text-gray-500 text-lg">Completed</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <p class="text-gray-500 text-lg">Completed</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.CompletedTasks</h2> @* ❗ UPDATED ❗ *@
 
                     <p class="text-base text-gray-400">Finished tasks</p>
 
@@ -353,7 +376,7 @@
 
                 <div>
 
-                    <p class="text-gray-500 text-lg">Pending</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">0</h2>
+                    <p class="text-gray-500 text-lg">Pending</p> <h2 class="text-3xl font-bold text-gray-800 mt-1">@Model.PendingTasks</h2> @* ❗ UPDATED ❗ *@
 
                     <p class="text-base text-gray-400">In progress</p>
 
@@ -422,21 +445,21 @@
                             <svg width="150" height="150" viewBox="0 0 150 150">
 
                                 <circle class="text-gray-300"
-                                        stroke="currentColor"
-                                        stroke-width="10"
-                                        fill="transparent"
-                                        r="65"
-                                        cx="75"
-                                        cy="75" />
+                                                            stroke="currentColor"
+                                                            stroke-width="10"
+                                                            fill="transparent"
+                                                            r="65"
+                                                            cx="75"
+                                                            cy="75" />
 
                                 <circle class="progress-ring-circle text-primary"
-                                        stroke="currentColor"
-                                        stroke-width="10"
-                                        fill="transparent"
-                                        r="65"
-                                        cx="75"
-                                        cy="75"
-                                        style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
+                                                            stroke="currentColor"
+                                                            stroke-width="10"
+                                                            fill="transparent"
+                                                            r="65"
+                                                            cx="75"
+                                                            cy="75"
+                                                            style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
 
                             </svg>
 
@@ -590,11 +613,11 @@
 
 
 
-    // Example Usage (You will replace this with real data from your backend)
+    // ❗ ETO ANG UPDATED SECTION: Ginagamit na ang C# data ❗
 
-    const totalTasks = 10;
+    const totalTasks = @Model.TotalTasks;
 
-    const completedTasks = 7;
+    const completedTasks = @Model.CompletedTasks;
 
 
 
@@ -617,33 +640,3 @@
     }
 
 </script>
-
-
-
-then ito yung sa admindashboard.cshtml.cs
-
-
-
-using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
-
-
-namespace TaskOrganizer.Pages
-
-{
-
-    public class AdminDashboardModel : PageModel
-
-    {
-
-        public void OnGet()
-
-        {
-
-        }
-
-    }
-
-}

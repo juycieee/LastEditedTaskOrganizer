@@ -15,14 +15,18 @@ namespace TaskOrganizer.Models
         public string? Description { get; set; }
         public string? Priority { get; set; }
         public DateTime? DueDate { get; set; }
-
+        public string? AttachmentUrl { get; set; }
         // ✅ IDINAGDAG: ID ng Admin/User na nag-assign ng Task
-        public string? AssignerId { get; set; }
 
         public string? Status { get; set; }
 
         public DateTime DateAssigned { get; set; }
 
         public DateTime? CompletionDate { get; set; } // Pwedeng null kung hindi pa tapos ang task
+
+        // Sa Task.cs
+        // ...
+        public string? AssignerId { get; set; } 
     }
+    
 }

@@ -8,6 +8,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileProviders; // ❗ ADDED ❗
+using System.IO; // ❗ ADDED ❗
+using System; // ❗ ADDED ❗
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,9 +24,9 @@ builder.Services.AddRazorPages();
 builder.Services.Configure<MongoDBSettings>(
     builder.Configuration.GetSection("MongoDB"));
 
-// ❗ KRITIKAL NA PAGBABAGO: Gamitin ang tamang model name para sa configuration ❗
+// ❗ KRITIKAL NA PAGBABAGO: Gamitin ang tamang model name para sa configuration (Assumed EmailSettings Model) ❗
 // I-a-assume na mayroon kayong 'EmailSettings' na model class para sa configuration
-builder.Services.Configure<EmailService>( // Pinalitan ang EmailService ng EmailSettings
+builder.Services.Configure<EmailService>( // Pinalitan ang EmailService ng EmailSettings (kung ito ang model name)
     builder.Configuration.GetSection("EmailSettings"));
 
 // 2. I-register ang IMongoClient at IMongoDatabase (Ginamit ang IOptions)
@@ -83,6 +86,37 @@ builder.Services.AddAuthorization();
 
 // 5. Build at Configuration ng Pipeline
 var app = builder.Build();
+
+// --- Middleware Pipeline Configuration ---
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+// ❗ IMPORTANT: I-enable ang default static files (wwwroot) ❗
+app.UseStaticFiles();
+
+// ❗ KRITIKAL NA SOLUSYON PARA SA 404 ATTACHMENT ERROR ❗
+// I-configure ang Static Files para sa 'attachments' folder
+string attachmentPath = Path.Combine(Directory.GetCurrentDirectory(), "attachments");
+
+// Siguraduhin na may folder
+if (!Directory.Exists(attachmentPath))
+{
+    Directory.CreateDirectory(attachmentPath);
+}
+
+// I-configure ang middleware para i-serve ang files sa /attachments URL path
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(attachmentPath),
+    RequestPath = "/attachments" // Ito ang URL path na gagamitin
+});
 
 
 // ❗ KRITIKAL NA PAGBABAGO: ILAGAY ANG AUTHENTICATION MIDDLWARE ❗

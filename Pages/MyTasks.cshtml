@@ -9,127 +9,151 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" xintegrity="sha512-dcZ6a6u+QHbX5gP0F0ZQ/5DwC1ElGfFY7u1y6m3Oa4k5+HxJ9y8Lzr/6qImQnP+mF8xA6djLM0h+4q45X+3xKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
+
     /* ❗ CSS RESET ❗ */
-    body, html {
-        margin: 0 !important;
-        padding: 0 !important;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-        font-family: 'Inter', sans-serif;
+        body, html {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                font-family: 'Inter', sans-serif;
+
     }
 
-    .color-primary {
-        background-color: #8B453A;
+        .color-primary {
+                background-color: #8B453A;
+
     }
 
-    .color-secondary {
-        background-color: #D0B8A8;
+        .color-secondary {
+                background-color: #D0B8A8;
+
     }
 
-    .color-accent {
-        background-color: #DFD3C3;
+        .color-accent {
+                background-color: #DFD3C3;
+
     }
 
-    .color-light {
-        background-color: #F8EDE3;
+        .color-light {
+                background-color: #F8EDE3;
+
     }
 
-    .text-primary {
-        color: #8B453A;
+        .text-primary {
+                color: #8B453A;
+
     }
 
-    .sidebar-bg {
-        background-color: #8B453A;
+        .sidebar-bg {
+                background-color: #8B453A;
+
     }
 
-    .main-bg {
-        background-color: #F8EDE3;
+        .main-bg {
+                background-color: #F8EDE3;
+
     }
 
-    .card-bg {
-        background-color: white;
+        .card-bg {
+                background-color: white;
+
     }
 
-    .link-text {
-        font-size: 1.05rem;
-        font-weight: 500;
+        .link-text {
+                font-size: 1.05rem;
+                font-weight: 500;
+
     }
 
-    .active-link {
-        background-color: #D0B8A8;
-        color: #3A0519;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        font-weight: 700;
+        .active-link {
+                background-color: #D0B8A8;
+                color: #3A0519;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                font-weight: 700;
+
     }
 
-    .hover-link:hover {
-        background-color: #D0B8A8;
-        opacity: 0.9;
-        color: #3A0519;
+        .hover-link:hover {
+                background-color: #D0B8A8;
+                opacity: 0.9;
+                color: #3A0519;
+
     }
 
-    .user-btn {
-        background-color: #D0B8A8;
-        color: #8B453A;
-        font-weight: bold;
-        border: 1px solid #DFD3C3;
+        .user-btn {
+                background-color: #D0B8A8;
+                color: #8B453A;
+                font-weight: bold;
+                border: 1px solid #DFD3C3;
+
     }
 
-        .user-btn:hover {
-            background-color: #8B453A;
-            color: white;
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
+            .user-btn:hover {
+                    background-color: #8B453A;
+                    color: white;
+                    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
     }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #8B453A;
-        border-radius: 20px;
+        .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+
     }
 
-    .border-primary-accent {
-        border-color: #8B453A;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #8B453A;
+                border-radius: 20px;
+
     }
 
-    .text-primary-accent {
-        color: #8B453A;
+        .border-primary-accent {
+                border-color: #8B453A;
+
     }
+
+        .text-primary-accent {
+                color: #8B453A;
+
+    }
+
 
     /* Custom Status Badges */
-    .status-badge-pending {
-        background-color: #ffedd5;
-        color: #f97316;
-        font-weight: 600;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
+        .status-badge-pending {
+                background-color: #ffedd5;
+                color: #f97316;
+                font-weight: 600;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+
     }
 
-    .status-badge-inprogress {
-        background-color: #fef9c3;
-        color: #eab308;
-        font-weight: 600;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
+        .status-badge-inprogress {
+                background-color: #fef9c3;
+                color: #eab308;
+                font-weight: 600;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+
     }
 
-    .status-badge-completed {
-        background-color: #d1fae5;
-        color: #10b981;
-        font-weight: 600;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
+        .status-badge-completed {
+                background-color: #d1fae5;
+                color: #10b981;
+                font-weight: 600;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+
     }
 
-    .status-badge-overdue { /* Overdue Badge Style */
-        background-color: #fee2e2; /* Light Red */
-        color: #ef4444; /* Bright Red */
-        font-weight: 700;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
+        .status-badge-overdue { /* Overdue Badge Style */
+                background-color: #fee2e2; /* Light Red */
+                color: #ef4444; /* Bright Red */
+                font-weight: 700;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+
     }
 </style>
 
@@ -308,6 +332,17 @@
                                         <strong>Assigned By:</strong>
                                         <span class="font-semibold text-gray-800">@assignerName</span>
                                     </p>
+
+                                    @if (!string.IsNullOrEmpty(task.AttachmentUrl))
+                                    {
+                                        <p class="flex items-center gap-2">
+                                            <i class="fas fa-paperclip text-primary-accent w-4"></i>
+                                            <strong>File:</strong>
+                                            <a href="@task.AttachmentUrl" target="_blank" class="text-blue-500 hover:text-blue-700 underline truncate">
+                                                Download Attachment
+                                            </a>
+                                        </p>
+                                    }
                                 </div>
                             </div>
 

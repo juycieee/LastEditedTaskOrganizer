@@ -2,8 +2,8 @@
 @model TaskOrganizer.Pages.AssignTaskModel
 @{
     ViewData["Title"] = "Assign New Task";
-    // I-set ang Layout sa null para walang default margin/container.
-    Layout = null;
+    // I-set ang Layout sa null para walang default margin/container.
+    Layout = null;
 }
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -12,119 +12,143 @@
 
 <style>
 
-    body, html {
-        margin: 0 !important;
-        padding: 0 !important;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-        font-family: 'Inter', sans-serif;
+        body, html {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                font-family: 'Inter', sans-serif;
+
     }
 
-    .color-primary {
-        background-color: #850E35;
+        .color-primary {
+                background-color: #850E35;
+
     }
 
-    .color-secondary {
-        background-color: #EE6983;
+        .color-secondary {
+                background-color: #EE6983;
+
     }
 
-    .color-accent {
-        background-color: #FFC4C4;
+        .color-accent {
+                background-color: #FFC4C4;
+
     }
 
-    .color-light {
-        background-color: #FCF5EE;
+        .color-light {
+                background-color: #FCF5EE;
+
     }
 
-    .text-primary {
-        color: #850E35;
+        .text-primary {
+                color: #850E35;
+
     }
 
-    .text-secondary {
-        color: #EE6983;
+        .text-secondary {
+                color: #EE6983;
+
     }
 
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
+        .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+
     }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #850E35;
-        border-radius: 20px;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #850E35;
+                border-radius: 20px;
+
     }
 
-    .sidebar-bg {
-        background-color: #850E35;
+        .sidebar-bg {
+                background-color: #850E35;
+
     }
 
-    .main-bg {
-        background-color: #FCF5EE;
+        .main-bg {
+                background-color: #FCF5EE;
+
     }
 
-    .card-bg {
-        background-color: white;
+        .card-bg {
+                background-color: white;
+
     }
 
-    .header-card {
-        background-color: white;
-        border-top: 4px solid #EE6983;
+        .header-card {
+                background-color: white;
+                border-top: 4px solid #EE6983;
+
     }
 
-    .sidebar-link-text {
-        font-size: 1.05rem; /* SLIGHTLY LARGER LINKS */
-        font-weight: 500;
+        .sidebar-link-text {
+                font-size: 1.05rem; /* SLIGHTLY LARGER LINKS */
+                font-weight: 500;
+
     }
 
-    .active-link {
-        background-color: #EE6983;
-        color: white;
-        border-left: 4px solid #FFC4C4;
-        padding-left: 20px;
+        .active-link {
+                background-color: #EE6983;
+                color: white;
+                border-left: 4px solid #FFC4C4;
+                padding-left: 20px;
+
     }
 
-        .active-link span {
-            margin-left: -4px;
-        }
+            .active-link span {
+                    margin-left: -4px;
 
-    .hover-link:hover {
-        background-color: #EE6983;
-        opacity: 0.9;
     }
 
-    .admin-btn {
-        background-color: #FFC4C4;
-        color: #850E35;
-        font-weight: bold;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: 1px solid #EE6983;
+        .hover-link:hover {
+                background-color: #EE6983;
+                opacity: 0.9;
+
     }
 
-        .admin-btn:hover {
-            background-color: #EE6983;
-            color: white;
-        }
+        .admin-btn {
+                background-color: #FFC4C4;
+                color: #850E35;
+                font-weight: bold;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                border: 1px solid #EE6983;
 
-    .assign-btn {
-        background-color: #EE6983;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-        .assign-btn:hover {
-            background-color: #850E35;
-        }
+            .admin-btn:hover {
+                    background-color: #EE6983;
+                    color: white;
 
-    .icon-color {
-        color: #850E35;
     }
 
-    .focus-ring-primary:focus {
-        border-color: #EE6983;
-        box-shadow: 0 0 0 3px rgba(238, 105, 131, 0.4);
+        .assign-btn {
+                background-color: #EE6983;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
     }
 
-    .modal-backdrop {
-        background-color: rgba(0, 0, 0, 0.6);
+            .assign-btn:hover {
+                    background-color: #850E35;
+
+    }
+
+        .icon-color {
+                color: #850E35;
+
+    }
+
+        .focus-ring-primary:focus {
+                border-color: #EE6983;
+                box-shadow: 0 0 0 3px rgba(238, 105, 131, 0.4);
+
+    }
+
+        .modal-backdrop {
+                background-color: rgba(0, 0, 0, 0.6);
+
     }
 
 </style>
@@ -188,15 +212,15 @@
                 </div>
             </div>
 
-            <form method="post" class="space-y-6">
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="employee" class="block text-base font-bold text-gray-700 mb-1">Assign to Employee</label>
                         <select id="employee"
-                                name="employee"
-                                asp-for="Input.EmployeeId"
-                                asp-items="Model.EmployeeList"
-                                class="mt-1 block w-full px-4 py-3 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus-ring-primary appearance-none cursor-pointer">
+                                                name="employee"
+                                                asp-for="Input.EmployeeId"
+                                                asp-items="Model.EmployeeList"
+                                                class="mt-1 block w-full px-4 py-3 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus-ring-primary appearance-none cursor-pointer">
                             <option value="">-- Select Employee --</option>
                         </select>
                     </div>
@@ -219,29 +243,33 @@
                     <textarea id="description" name="description" rows="5" class="mt-1 block w-full p-4 text-base border border-gray-300 rounded-md shadow-sm focus:ring-primary focus-ring-primary resize-none" placeholder="Enter detailed task description..." required></textarea>
                 </div>
 
-                <!-- NEW GRID FOR DATE AND TIME -->
+                <div class="pt-2">
+                    <input type="file" id="attachmentFile" name="AttachmentFile" asp-for="Input.AttachmentFile" class="hidden" />
+
+                    <label for="attachmentFile" class="flex items-center gap-3 text-lg font-semibold text-gray-700 hover:text-secondary cursor-pointer transition duration-150">
+                        <i class="fas fa-paperclip text-2xl icon-color hover:text-secondary"></i>
+                        <span>Attach File (Optional)</span>
+                        <span id="fileNameDisplay" class="text-sm text-gray-500 font-normal italic ml-4">No file selected.</span>
+                    </label>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="due_date" class="block text-base font-bold text-gray-700 mb-1">Due Date</label>
                         <input type="date"
-                               id="due_date"
-                               name="due_date"
-                               asp-for="Input.DueDate"
-                               class="mt-1 block w-full p-3 text-base border border-gray-300 rounded-md shadow-sm focus:ring-primary focus-ring-primary" />
+                                               id="due_date"
+                                               name="due_date"
+                                               asp-for="Input.DueDate"
+                                               class="mt-1 block w-full p-3 text-base border border-gray-300 rounded-md shadow-sm focus:ring-primary focus-ring-primary" />
                     </div>
                     <div>
-                        <!-- NEW TIME INPUT FIELD -->
                         <label for="due_time" class="block text-base font-bold text-gray-700 mb-1">Due Time</label>
                         <input type="time"
-                               id="due_time"
-                               name="due_time"
-                               asp-for="Input.DueTime"
-                               class="mt-1 block w-full p-3 text-base border border-gray-300 rounded-md shadow-sm focus:ring-primary focus-ring-primary" />
-                        <!-- END NEW TIME INPUT FIELD -->
+                                               id="due_time"
+                                               name="due_time"
+                                               asp-for="Input.DueTime"
+                                               class="mt-1 block w-full p-3 text-base border border-gray-300 rounded-md shadow-sm focus:ring-primary focus-ring-primary" />
                     </div>
                 </div>
-                <!-- END NEW GRID FOR DATE AND TIME -->
-
                 <div class="pt-4">
                     <button type="submit" class="assign-btn w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-md shadow-lg text-xl font-semibold text-white transition duration-150">
                         <i class="fas fa-check-circle mr-2"></i> Assign Task to Employee
@@ -284,4 +312,23 @@
     function hideLogoutModal() {
         modal.classList.add('hidden');
     }
+
+    // 📎 NEW: Script for File Name Display 📎
+    const fileInput = document.getElementById('attachmentFile');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            // Ipakita ang pangalan ng file
+            fileNameDisplay.textContent = this.files[0].name;
+            // Para maging bold at green ang text
+            fileNameDisplay.classList.add('text-green-600', 'font-bold');
+            fileNameDisplay.classList.remove('text-gray-500', 'font-normal');
+        } else {
+            // Kapag walang na-select
+            fileNameDisplay.textContent = 'No file selected.';
+            fileNameDisplay.classList.remove('text-green-600', 'font-bold');
+            fileNameDisplay.classList.add('text-gray-500', 'font-normal');
+        }
+    });
 </script>

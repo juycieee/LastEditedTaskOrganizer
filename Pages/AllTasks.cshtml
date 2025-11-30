@@ -2,139 +2,172 @@
 @model TaskOrganizer.Pages.AllTasksModel
 @{
     ViewData["Title"] = "All Tasks";
-    // I-set ang Layout sa null para walang default margin/container.
-    Layout = null;
+    // I-set ang Layout sa null para walang default margin/container.
+    Layout = null;
 }
 
+@* ❗ FIX 1: IDAGDAG ANG ANTI-FORGERY TOKEN PARA GUMANA ANG POST METHOD NG DELETE/ARCHIVE *@
+@Html.AntiForgeryToken()
+
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dcZ6a6u+QHbX5gP0F0ZQ/5DwC1ElGfFY7u1y6m3Oa4k5+HxJ9y8Lzr/6qImQnP+mF8xA6djLM0h+4q45X+3xKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
+
+
     /* ❗ CSS RESET - PARA MA-SURE NA NAKADIKIT SA GILID ❗ */
-    body, html {
-        margin: 0 !important;
-        padding: 0 !important;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
+        body, html {
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+
     }
 
-    .color-primary {
-        background-color: #850E35;
+        .color-primary {
+                background-color: #850E35;
+
     }
 
-    .color-secondary {
-        background-color: #EE6983;
+        .color-secondary {
+                background-color: #EE6983;
+
     }
 
-    .color-accent {
-        background-color: #FFC4C4;
+        .color-accent {
+                background-color: #FFC4C4;
+
     }
 
-    .color-light {
-        background-color: #FCF5EE;
+        .color-light {
+                background-color: #FCF5EE;
+
     }
 
-    .text-primary {
-        color: #850E35;
+        .text-primary {
+                color: #850E35;
+
     }
 
-    .text-secondary {
-        color: #EE6983;
+        .text-secondary {
+                color: #EE6983;
+
     }
 
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
+        .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+
     }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #850E35;
-        border-radius: 20px;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #850E35;
+                border-radius: 20px;
+
     }
 
-    .sidebar-bg {
-        background-color: #850E35;
+        .sidebar-bg {
+                background-color: #850E35;
+
     }
 
-    .main-bg {
-        background-color: #FCF5EE;
+        .main-bg {
+                background-color: #FCF5EE;
+
     }
 
-    .card-bg {
-        background-color: white;
+        .card-bg {
+                background-color: white;
+
     }
 
-    .header-card {
-        background-color: white;
-        border-top: 4px solid #EE6983;
+        .header-card {
+                background-color: white;
+                border-top: 4px solid #EE6983;
+
     }
 
-    .sidebar-link-text {
-        font-size: 1.05rem;
-        font-weight: 500;
+        .sidebar-link-text {
+                font-size: 1.05rem;
+                font-weight: 500;
+
     }
 
-    .table-cell-text {
-        font-size: 1.05rem;
+        .table-cell-text {
+                font-size: 1.05rem;
+
     }
 
-    .table-header-text {
-        font-size: 0.9rem;
-        font-weight: 700;
+        .table-header-text {
+                font-size: 0.9rem;
+                font-weight: 700;
+
     }
 
-    .active-link {
-        background-color: #EE6983;
-        color: white;
-        border-left: 4px solid #FFC4C4;
-        padding-left: 20px;
+        .active-link {
+                background-color: #EE6983;
+                color: white;
+                border-left: 4px solid #FFC4C4;
+                padding-left: 20px;
+
     }
 
-        .active-link span {
-            margin-left: -4px;
+            .active-link span {
+                    margin-left: -4px;
+
+    }
+
+        .hover-link:hover {
+                background-color: #EE6983;
+                opacity: 0.9;
+
+    }
+
+        .admin-btn {
+                background-color: #FFC4C4;
+                color: #850E35;
+                font-weight: bold;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                border: 1px solid #EE6983;
+
+    }
+
+            .admin-btn:hover {
+                    background-color: #EE6983;
+                    color: white;
+
+    }
+
+        .filter-icon-color {
+                color: #850E35;
+
+    }
+
+        .focus-ring-primary:focus {
+                border-color: #EE6983; /* Pink border on focus */
+                box-shadow: 0 0 0 3px rgba(238, 105, 131, 0.4); /* Pink ring */
+
+    }
+
+
+    /* 🚨 BINAGO ITO: Ibang kulay para sa DELETE, at pinalitan ang class name 🚨 */
+        .action-delete-btn {
+                background-color: #dc2626; /* Red-600 */
+                color: white;
+
+    }
+
+                .action-delete-btn:hover {
+                        background-color: #b91c1c; /* Red-700 on hover */
+
         }
 
-    .hover-link:hover {
-        background-color: #EE6983;
-        opacity: 0.9;
-    }
 
-    .admin-btn {
-        background-color: #FFC4C4;
-        color: #850E35;
-        font-weight: bold;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: 1px solid #EE6983;
-    }
+    /* ❗ Tinanggal ang .action-edit-btn styles ❗ */
+        .modal-backdrop {
+                background-color: rgba(0, 0, 0, 0.6);
 
-        .admin-btn:hover {
-            background-color: #EE6983;
-            color: white;
-        }
-
-    .filter-icon-color {
-        color: #850E35;
-    }
-
-    .focus-ring-primary:focus {
-        border-color: #EE6983; /* Pink border on focus */
-        box-shadow: 0 0 0 3px rgba(238, 105, 131, 0.4); /* Pink ring */
-    }
-
-    .action-edit-icon {
-        color: #EE6983;
-    }
-
-        .action-edit-icon:hover {
-            color: #850E35;
-        }
-
-    .action-delete-icon:hover {
-        color: #850E35;
-    }
-
-    .modal-backdrop {
-        background-color: rgba(0, 0, 0, 0.6);
     }
 </style>
 
@@ -188,6 +221,7 @@
             <button class="admin-btn text-lg px-5 py-2 rounded-lg font-semibold transition duration-150 flex items-center gap-2 shadow-md">
                 <i class="fas fa-user-shield"></i> Admin
             </button>
+
         </div>
 
         <div class="card-bg p-6 rounded-xl shadow-lg mb-8">
@@ -199,33 +233,32 @@
             </div>
 
             <div class="flex space-x-4 mt-4">
-                <select name="EmployeeFilter" class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
+                <select id="EmployeeFilter" onchange="filterTasks()" class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
                     <option value="">All Employees</option>
                     @foreach (var employee in Model.EmployeeList)
                     {
-                        <option value="@employee.Id">@employee.Name</option>
+                        <option value="@employee.Name">@employee.Name</option>
                     }
                 </select>
-                <select class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
-                    <option>All Status</option>
-                    <option>Pending</option>
-                    <option>In Progress</option>
-                    <option>Completed</option>
+                <select id="StatusFilter" onchange="filterTasks()" class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
                 </select>
 
-<select name="PriorityFilter" class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
-    <option value="">All Priorities</option>
-    
-    @{
-        // Dahil walang Priority Model, gumamit tayo ng static list
-        var priorities = new List<string> { "High", "Medium", "Low" };
-    }
-    
-    @foreach (var p in priorities)
-    {
-        <option value="@p">@p</option>
-    }
-</select>            </div>
+                <select id="PriorityFilter" onchange="filterTasks()" class="px-4 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus-ring-primary appearance-none cursor-pointer">
+                    <option value="">All Priorities</option>
+                    @{
+                        // Dahil walang Priority Model, gumamit tayo ng static list
+                        var priorities = new List<string> { "High", "Medium", "Low" };
+                    }
+                    @foreach (var p in priorities)
+                    {
+                        <option value="@p">@p</option>
+                    }
+                </select>
+            </div>
         </div>
 
         <div class="card-bg p-8 rounded-xl shadow-lg flex flex-col flex-grow min-h-[400px]">
@@ -259,7 +292,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody id="tasksTableBody" class="bg-white divide-y divide-gray-200">
                         @if (Model.Tasks.Any())
                         {
                             @foreach (var task in Model.Tasks)
@@ -268,38 +301,43 @@
                                 var assignedEmployee = Model.EmployeeList.FirstOrDefault(e => e.Id == task.EmployeeId);
                                 var employeeName = assignedEmployee?.Name ?? "Unknown Employee"; // Gamitin ang 'Unknown' kung hindi mahanap
 
-                                <tr>
+                                <tr data-employee="@employeeName" data-status="@task.Status" data-priority="@task.Priority">
                                     <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800">
                                         @employeeName
                                     </td>
-                                                                        <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800">
+                                    <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800">
                                         @task.Title
                                     </td>
 
                                     <td class="px-6 py-4 table-cell-text whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @(task.Status == "Completed" ? "bg-green-100 text-green-800" :task.Status == "In Progress" ? "bg-yellow-100 text-yellow-800" :"bg-red-100 text-red-800")">@task.Status
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @(task.Status == "Completed" ? "bg-green-100 text-green-800" : task.Status == "In Progress" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800")">
+                                            @task.Status
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 table-cell-text whitespace-nowrap">
-                                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @(task.Priority == "High" ? "bg-red-200 text-red-900" : task.Priority == "Medium" ? "bg-yellow-200 text-yellow-900" :"bg-blue-200 text-blue-900")"> @task.Priority
-                                         </span>
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @(task.Priority == "High" ? "bg-red-200 text-red-900" : task.Priority == "Medium" ? "bg-yellow-200 text-yellow-900" : "bg-blue-200 text-blue-900")">
+                                            @task.Priority
+                                        </span>
                                     </td>
-                            <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800"> @(task.DueDate.HasValue? task.DueDate.Value.ToString("MMM dd, yyyy") : "N/A")
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="/EditTask/@task.Id" class="action-edit-icon text-xl hover:text-primary mr-3 transition duration-150" title="Edit Task">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="/DeleteTask/@task.Id" class="action-delete-icon text-xl text-red-600 hover:text-red-900 transition duration-150" title="Delete Task">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                                                }
+                                    <td class="px-6 py-4 table-cell-text whitespace-nowrap text-gray-800">
+                                        @(task.DueDate.HasValue? task.DueDate.Value.ToString("MMM dd, yyyy") : "N/A")
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+
+                                        @* 🚨 BINAGO ITO: Asp-page-handler ay 'Delete', onsubmit confirmation message ay pinalitan 🚨 *@
+                                        <form method="post" asp-page-handler="Delete" asp-route-id="@task.Id" onsubmit="return confirm('Are you sure you want to permanently DELETE this task? This action cannot be undone.');" class="inline">
+                                            @* Kailangan ang Anti-Forgery token sa form submission, kaya ito ay nasa itaas na ng page *@
+                                            <button type="submit" class="action-delete-btn text-xs py-2 px-3 rounded-lg font-bold transition duration-150 uppercase shadow-md hover:shadow-lg">
+                                                DELETE @* 🚨 BINAGO ITO: Palitan ang label ng button 🚨 *@
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
                         }
                         else
                         {
-                            <tr>
+                            <tr id="noTaskMessageRow">
                                 <td colspan="6" class="px-6 py-4 text-center text-gray-500">
                                     No added task yet.
                                 </td>
@@ -333,8 +371,7 @@
 </div>
 
 <script>
-    // Inilipat ang JS dito para gumana kahit walang Layout file (Layout = null)
-
+    // Log out Modal functions
     const modal = document.getElementById('logoutModal');
 
     function showLogoutModal(event) {
@@ -344,5 +381,60 @@
 
     function hideLogoutModal() {
         modal.classList.add('hidden');
+    }
+
+    // 🚀 TASK FILTERING FUNCTION 🚀
+
+    function filterTasks() {
+        // Kuhanin ang selected values
+        const employeeFilter = $('#EmployeeFilter').val();
+        const statusFilter = $('#StatusFilter').val();
+        const priorityFilter = $('#PriorityFilter').val();
+        let tasksFound = false;
+
+        // Mag-iterate sa bawat table row
+        $('#tasksTableBody tr').each(function() {
+            // I-skip ang 'No task' message row
+            if ($(this).attr('id') === 'noTaskMessageRow') {
+                return true; // continue
+            }
+
+            const employeeName = $(this).data('employee');
+            const taskStatus = $(this).data('status');
+            const taskPriority = $(this).data('priority');
+
+            // Check if the row should be shown
+            const employeeMatch = (employeeFilter === "" || employeeName === employeeFilter);
+            const statusMatch = (statusFilter === "" || taskStatus === statusFilter);
+            const priorityMatch = (priorityFilter === "" || taskPriority === priorityFilter);
+
+            if (employeeMatch && statusMatch && priorityMatch) {
+                $(this).show();
+                tasksFound = true;
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // I-handle ang "No tasks found" message
+        if (!tasksFound && $('#tasksTableBody tr').length > 0) {
+            // Kung walang nakitang tasks, i-display ang message, at kung wala pa, gumawa
+            let noTaskRow = $('#noTaskMessageRow');
+            if (noTaskRow.length === 0) {
+                $('#tasksTableBody').append('<tr id="noTaskMessageRow"><td colspan="6" class="px-6 py-4 text-center text-gray-500">No tasks found matching the filter.</td></tr>');
+            } else {
+                noTaskRow.show();
+                noTaskRow.find('td').text('No tasks found matching the filter.');
+            }
+        } else {
+            // Kung may tasks, itago ang "No tasks found" message
+            $('#noTaskMessageRow').hide();
+        }
+
+        // Kung ang initial state ay walang tasks, iwanan ang original message
+        if ($('#tasksTableBody tr:not(#noTaskMessageRow)').length === 0 && (employeeFilter === "" && statusFilter === "" && priorityFilter === "")) {
+            $('#noTaskMessageRow').show();
+            $('#noTaskMessageRow').find('td').text('No added task yet.');
+        }
     }
 </script>

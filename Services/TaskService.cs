@@ -6,8 +6,8 @@ using System.Linq; // Added for clarity (though not strictly needed for this fil
 
 namespace TaskOrganizer.Services
 {
-    // Alias para sa Task model (para mas malinis)
-    using AppTask = TaskOrganizer.Models.Task;
+    // Alias para sa Task model (para mas malinis)
+    using AppTask = TaskOrganizer.Models.Task;
 
     public class TaskService
     {
@@ -35,14 +35,14 @@ namespace TaskOrganizer.Services
             return await _taskCollection.Find(_ => true).ToListAsync();
         }
 
-        // ❗ CRITICAL: Ito ang filtering method para sa bawat employee ❗
-        public async System.Threading.Tasks.Task<List<AppTask>> GetTasksByEmployeeIdAsync(string employeeId)
+        // ❗ CRITICAL: Ito ang filtering method para sa bawat employee ❗
+        public async System.Threading.Tasks.Task<List<AppTask>> GetTasksByEmployeeIdAsync(string employeeId)
         {
-            // Tiyakin na ang field name sa Task model na Assigned sa employee ay 'EmployeeId'
-            // Base sa iyong code: task.EmployeeId == employeeId
-            return await _taskCollection
-                .Find(task => task.EmployeeId == employeeId)
-                .ToListAsync();
+            // Tiyakin na ang field name sa Task model na Assigned sa employee ay 'EmployeeId'
+            // Base sa iyong code: task.EmployeeId == employeeId
+            return await _taskCollection
+        .Find(task => task.EmployeeId == employeeId)
+        .ToListAsync();
         }
 
         public async System.Threading.Tasks.Task UpdateTaskStatusAsync(string taskId, string newStatus)
@@ -56,6 +56,20 @@ namespace TaskOrganizer.Services
             }
 
             await _taskCollection.UpdateOneAsync(filter, update);
+        }
+
+        // 🚨 BAGONG METHOD PARA SA PERMANENTENG PAGBURA (MONGODB) 🚨
+        /// <summary>
+        /// Permanently deletes a task record from the MongoDB collection.
+        /// </summary>
+        /// <param name="taskId">The ID of the task to delete.</param>
+        public async System.Threading.Tasks.Task DeleteTaskAsync(string taskId)
+        {
+            // Gumawa ng filter para hanapin ang dokumento gamit ang ID
+            var filter = Builders<AppTask>.Filter.Eq(t => t.Id, taskId);
+
+            // Execute ang DeleteOne operation sa MongoDB
+            await _taskCollection.DeleteOneAsync(filter);
         }
     }
 }
